@@ -1,0 +1,34 @@
+services:
+  _defaults:
+    public: true
+  rgocaepak.grid.query.ocaoperative_query_builder:
+      class: 'RgOcaEpak\Grid\Query\OcaOperativeQueryBuilder'
+      parent: 'prestashop.core.grid.abstract_query_builder'
+      arguments:
+        - "@=service('prestashop.adapter.legacy.context').getContext().language.id"
+        - "@=service('prestashop.adapter.legacy.context').getContext().shop.id"
+      public: true
+
+    # Configure our Grid Data factory to use the query builder that we registered above
+  prestashop.core.grid.data.factory.oca_data_factory:
+      class: 'PrestaShop\PrestaShop\Core\Grid\Data\Factory\DoctrineGridDataFactory'
+      arguments:
+        - '@rgocaepak.grid.query.ocaoperative_query_builder' # service id of our query builder
+        - '@prestashop.core.hook.dispatcher' # every doctrine query builder needs the hook dispatcher
+        - '@prestashop.core.grid.query.doctrine_query_parser' # parser to get the raw SQL query
+        - 'OcaEpak' # this should match your grid id, in our case it's "products"
+
+  rgocaepak.grid.grid_definition_factory:
+    class: 'RgOcaEpak\Grid\OcaGridDefinitionFactory'
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  # Configure Grid factory to use services we have implemented
+  rgocaepak.grid_factory:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    arguments:
+      - '@rgocaepak.grid.grid_definition_factory' # our definition factory      # our data factory
+      - '@prestashop.core.grid.data.factory.oca_data_factory'
+      - '@prestashop.core.grid.filter.form_factory'                            # core service needed by grid factory
+      - '@prestashop.core.hook.dispatcher'                                     # core service needed by grid factory
+

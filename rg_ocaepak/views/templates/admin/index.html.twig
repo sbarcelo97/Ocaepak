@@ -1,0 +1,397 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% block content %}
+    {{ form_start(form) }}
+    {% if save %}
+    {{ ps.infotip('FORMULARIO ENVIADO CON EXITO') }}
+    {% endif %}
+    {% if errors is defined and errors is not empty %}
+        {% for error in errors %}
+            {{ ps.warningtip(error) }}
+        {% endfor %}
+    {% endif %}
+<div class="row justify-content-center">
+    <div class="col">
+        <div class="card" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'OCA - Configuración del usuario'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Email' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_EMAIL) }}
+                            {{ form_widget(form.RG_OCAEPAK_EMAIL) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Contraseña' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_PASSWORD) }}
+                            {{ form_widget(form.RG_OCAEPAK_PASSWORD) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                        {{ 'Número de cuenta OCA'|trans({},'Modules.Rgocaepak.Form') }}
+                        </label>
+                       <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_ACCOUNT) }}
+                            {{ form_widget(form.RG_OCAEPAK_ACCOUNT) }}
+                           <small class="form-text">{{ 'Podés encontrarlo ingresando a tu cuenta OCA y accediendo a la siguiente URL: <br/><a href="http://www5.oca.com.ar/ocaepak/Seguro/ListadoOperativas.asp" target="_blank" style="text-decoration: underline; font-weight: 700;" >http://www5.oca.com.ar/ocaepak/Seguro/ListadoOperativas.asp</a>.'}}</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                            {{ ps.label_with_help(('CUIT' |trans({},'Modules.Rgocaepak.Form')),('Debe tener el formato ##-########-# donde cada # es un dígito, y debe incluir los guiones'|trans({},'Modules.Rgocaepak.Form')))}}
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_CUIT) }}
+                            {{ form_widget(form.RG_OCAEPAK_CUIT) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Operativas OCA'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+    {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': grid} %}
+        </div>
+        <div class="card" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Envíos'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Código Postal de Origen' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_POSTCODE) }}
+                            {{ form_widget(form.RG_OCAEPAK_POSTCODE) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Días de espera para la recolección en impresión masiva' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_ORDERDAYS) }}
+                            {{ form_widget(form.RG_OCAEPAK_ORDERDAYS) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Habilitar admisiones OCA' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_ADMISSIONS_ENABLED) }}
+                            {{ form_widget(form.RG_OCAEPAK_ADMISSIONS_ENABLED) }}
+                            <small class="form-text">{{ 'Esto te permitirá generar admisiones y etiquetas para operativas enviadas desde una sucursal OCA(SaP, SaS)'|trans({},'Modules.Rgocaepak.Form')}}</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Habilitar recolecciones OCA' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_PICKUPS_ENABLED) }}
+                            {{ form_widget(form.RG_OCAEPAK_PICKUPS_ENABLED) }}
+                            <small class="form-text">{{ 'Esto te permitirá generar recollecciones y etiquetas para operativas desde tu domicilio (PaP, PaS)'|trans({},'Modules.Rgocaepak.Form')}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="branch-admission-card" show="{{ admissions }}" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Admisiones en Sucursal'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                {{ ps.infotip('Los envíos de operativas SaP y SaS se harán desde esta sucursal') }}
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Sucursal para admisiones' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_ADMISSION_BRANCH) }}
+                            {{ form_widget(form.RG_OCAEPAK_ADMISSION_BRANCH) }}
+                            <small class="form-text">{{ 'La sucursal desde donde enviarás tus paquetes'|trans({},'Modules.Rgocaepak.Form')}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="pickup-settings-card" show="{{ pickups }}">
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Recolecciones'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                {{ ps.infotip('Los envíos de operativas PaP y PaS serán recolectadas en esta dirección') }}
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Calle' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_STREET) }}
+                            {{ form_widget(form.RG_OCAEPAK_STREET) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Número' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_NUMBER) }}
+                            {{ form_widget(form.RG_OCAEPAK_NUMBER) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Piso' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_FLOOR) }}
+                            {{ form_widget(form.RG_OCAEPAK_FLOOR) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Departamento' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_APARTMENT) }}
+                            {{ form_widget(form.RG_OCAEPAK_APARTMENT) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Localidad' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_LOCALITY) }}
+                            {{ form_widget(form.RG_OCAEPAK_LOCALITY) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Provincia' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_PROVINCE) }}
+                            {{ form_widget(form.RG_OCAEPAK_PROVINCE) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Contacto' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_CONTACT) }}
+                            {{ form_widget(form.RG_OCAEPAK_CONTACT) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Solicitante' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_REQUESTOR) }}
+                            {{ form_widget(form.RG_OCAEPAK_REQUESTOR) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Observaciones' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_OBSERVATIONS) }}
+                            {{ form_widget(form.RG_OCAEPAK_OBSERVATIONS) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Franja horaria' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_TIMESLOT) }}
+                            {{ form_widget(form.RG_OCAEPAK_TIMESLOT) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="boxes-card" data-number-boxes="{% if boxes is empty %}1{% else %}{{ boxes | length}}{% endif %}">
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Empaquetado'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                {% if boxes is empty %}
+                    {{ ps.warningtip('Tienes que agregar al menos una caja') }}
+                {% else %}
+                    {{ ps.infotip('Estos son los tipos de caja que usarás en tus envíos') }}
+                {% endif %}
+                <div class="card-text">
+                   {% for box in boxes %}
+                    <div class="panel" id="oca-box-{{ loop.index }}">
+                        <div class="card-header">
+                        <label class="form-control-label">{{ 'Caja '|trans({},'Modules.Rgocaepak.Form') }}{{ loop.index }}</label>
+                            <a class="card-header-pills" href="box_id={{ loop.index }}"> <i class="material-icons">delete</i></a>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">
+                                {{ 'Dimensiones en cm' |trans({},'Modules.Rgocaepak.Form')}}
+                            </label>
+                            <div class="col-sm" style="display: flex; gap: 10px">
+                                <input type="text" class="form-control" name="oca-box-l-{{ loop.index }}" id="oca-box-l-{{ loop.index }}" value="{{ box.l }}">
+                                <text>x</text>
+                                <input type="text" class="form-control" name="oca-box-d-{{ loop.index }}" id="oca-box-d-{{ loop.index }}" value="{{ box.d }}">
+                                <text>x</text>
+                                <input type="text" class="form-control" name="oca-box-h-{{ loop.index }}" id="oca-box-h-{{ loop.index }}" value="{{ box.h }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">
+                                {{ 'Peso máximo del contenido de la caja' |trans({},'Modules.Rgocaepak.Form')}}
+                            </label>
+                            <div class="col-sm" style="display: flex">
+                                <div class="col ss" style="gap: 10px; display: inherit; align-items: center;max-width: 20%">
+                                <input class="form-control" type="text"  name="oca-box-xw-{{ loop.index }}" id="oca-box-xw-{{ loop.index }}" value="{{ box.xw }}">
+                                <text>kg </text>
+                                </div>
+                                <div class="col ss" style="gap: 10px; display: inherit; align-items: center;max-width: 20%">
+                                <label class="form-control-label">
+                                    {{ 'Usar por defecto' |trans({},'Modules.Rgocaepak.Form')}}
+                                </label>
+                                <input type="checkbox" class="oca-checkbox-field" name="oca-box-isd-{{ loop.index }}" id="oca-box-isd-{{ loop.index }}" {% if box.isd=="1" %}checked="true"{% endif %}>
+                                    <small class="form-text">{{ 'Se usará en la impresión masiva de etiquetas'|trans({},'Modules.Rgocaepak.Form')}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if boxes is empty %}
+                        <div class="panel" id="oca-box-1">
+                            <div class="card-header">
+                                <label class="form-control-label">{{ 'Caja '|trans({},'Modules.Rgocaepak.Form') }}1</label>
+                                <a class="card-header-pills" href="box_id=1"> <i class="material-icons">delete</i></a>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">
+                                    {{ 'Dimensiones en cm' |trans({},'Modules.Rgocaepak.Form')}}
+                                </label>
+                                <div class="col-sm" style="display: flex; gap: 10px">
+                                    <input type="text" class="form-control" name="oca-box-l-1" id="oca-box-l-1" >
+                                    <text>x</text>
+                                    <input type="text" class="form-control" name="oca-box-d-1" id="oca-box-d-1" >
+                                    <text>x</text>
+                                    <input type="text" class="form-control" name="oca-box-h-1" id="oca-box-h-1" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">
+                                    {{ 'Peso máximo del contenido de la caja' |trans({},'Modules.Rgocaepak.Form')}}
+                                </label>
+                                <div class="col-sm" style="display: flex">
+                                    <div class="col ss" style="gap: 10px; display: inherit; align-items: center;max-width: 20%">
+                                        <input class="form-control" type="text"  name="oca-box-xw-1" id="oca-box-xw-1" >
+                                        <text>kg </text>
+                                    </div>
+                                    <div class="col ss" style="gap: 10px; display: inherit; align-items: center;max-width: 20%">
+                                        <label class="form-control-label">
+                                            {{ 'Usar por defecto' |trans({},'Modules.Rgocaepak.Form')}}
+                                        </label>
+                                        <input type="checkbox" class="checkbox-field" name="oca-box-isd-1" id="oca-box-isd-1" checked="true">
+                                        <small class="form-text">{{ 'Se usará en la impresión masiva de etiquetas'|trans({},'Modules.Rgocaepak.Form')}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    <button id="add-oca-box" class="btn btn-default" type="button">{{ 'Agregar caja' |trans({},'Modules.Rgocaepak.Form')}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Tramitar Pedido'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'API Key Google Maps' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_GMAPS_API_KEY) }}
+                            {{ form_widget(form.RG_OCAEPAK_GMAPS_API_KEY) }}
+                            <small class="form-text">{{ 'Para mostrar el mapa al elegir la  sucursal donde recoger los envios en el checkout necesitás una API Key de Google Maps, que podés generar en esta URL:<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" style="text-decoration: underline; font-weight: 700;">https://developers.google.com/maps/documentation/javascript/get-api-key</a>'}}</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Tipo de selector de sucursales' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_BRANCH_SEL_TYPE) }}
+                            {{ form_widget(form.RG_OCAEPAK_BRANCH_SEL_TYPE) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <h3 class="card-header">
+                <i class="material-icons">shopping_basket</i> {{ 'Valores por defecto'|trans({},'Modules.Rgocaepak.Form') }}
+            </h3>
+            <div class="card-block row">
+                <div class="card-text">
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Peso por defecto' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_DEFWEIGHT) }}
+                            {{ form_widget(form.RG_OCAEPAK_DEFWEIGHT) }}
+                            <small class="form-text">{{ 'Peso para usar si no hay datos registrados en el producto, en kg'|trans({},'Modules.Rgocaepak.Form') }}</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Volumen por defecto' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_DEFVOLUME) }}
+                            {{ form_widget(form.RG_OCAEPAK_DEFVOLUME) }}
+                            <small class="form-text">{{ 'Volumen para usar en productos sin datos registrados, en cm cubico'|trans({},'Modules.Rgocaepak.Form') }}</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label">
+                            {{ 'Valor del envío en caso de fallos' |trans({},'Modules.Rgocaepak.Form')}}
+                        </label>
+                        <div class="col-sm">
+                            {{ form_errors(form.RG_OCAEPAK_FAILCOST) }}
+                            {{ form_widget(form.RG_OCAEPAK_FAILCOST) }}
+                            <small class="form-text">{{ 'Es el costo de envío que se usará en el desafortunado caso que el servidor de OCA no esté activo y no podamos obtener el costo'|trans({},'Modules.Rgocaepak.Form') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" id="form-page-save-button">{{ 'Guardar'|trans({}, 'Modules.Rgocaepak.Actions') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {{ form_end(form) }}
+{% endblock %}

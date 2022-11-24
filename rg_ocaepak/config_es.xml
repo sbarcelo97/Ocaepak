@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>rg_ocaepak</name>
+    <displayName><![CDATA[OCA e-Pak]]></displayName>
+    <version><![CDATA[1.0]]></version>
+    <description><![CDATA[Offer your customers automatic real-time quotes of their deliveries through OCA e-Pak]]></description>
+    <author><![CDATA[Region Global]]></author>
+    <tab><![CDATA[shipping_logistics]]></tab>
+	<confirmUninstall><![CDATA[This will delete any configured settings for this module. Continue?]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>

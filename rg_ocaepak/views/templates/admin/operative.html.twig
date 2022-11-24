@@ -1,0 +1,77 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% block content %}
+    {{ form_start(form) }}
+    {{ ps.infotip('Podés encontrar tus operativas en <a href="http://www5.oca.com.ar/ocaepak/Seguro/ListadoOperativas.asp">') }}
+    {% if error %}
+        {{ ps.warningtip(error) }}
+    {% endif %}
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card" >
+                <h3 class="card-header">
+                    <i class="material-icons">shopping_basket</i> {{ 'Agregar Operativa'|trans({},'Modules.Rgocaepak.Form') }}
+                </h3>
+                <div class="card-block row">
+                    <div class="card-text">
+                        <div class="form-group row">
+                            <label class="form-control-label">
+                                {{ 'Referencia' |trans({},'Modules.Rgocaepak.Form')}}
+                            </label>
+                            <div class="col-sm">
+                                {{ form_errors(form.OP_REFERENCE) }}
+                                {{ form_widget(form.OP_REFERENCE) }}
+                                <small class="form-text">{{'El id de la Operativa OCA.'|trans({}, 'Modules.Rgocaepak.Actions')}}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-control-label">
+                                {{ 'Descripción' |trans({},'Modules.Rgocaepak.Form')}}
+                            </label>
+                            <div class="col-sm">
+                                {{ form_errors(form.OP_DESC) }}
+                                {{ form_widget(form.OP_DESC) }}
+                                <small class="form-text">{{'Se mostrará en la descripción del transportista creado para esta operativa.'|trans({}, 'Modules.Rgocaepak.Actions')}}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-control-label">
+                                {{ 'Tipo'|trans({},'Modules.Rgocaepak.Form') }}
+                            </label>
+                            <div class="col-sm">
+                                {{ form_errors(form.OP_TYPE) }}
+                                {{ form_widget(form.OP_TYPE) }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-control-label">
+                                {{ 'Asegurado por Oca'|trans({},'Modules.Rgocaepak.Form') }}
+                            </label>
+                            <div class="col-sm">
+                                {{ form_errors(form.OP_INSURED) }}
+                                {{ form_widget(form.OP_INSURED) }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-control-label">
+                                {{ 'Cargo adicional'|trans({},'Modules.Rgocaepak.Form') }}
+                            </label>
+                            <div class="col-sm">
+                                {{ form_errors(form.OP_FEE) }}
+                                {{ form_widget(form.OP_FEE) }}
+                                <small class="form-text">{{'Se cobrará a los clientes que elijan esta opción. Puede ser un monto fijo (quitando el signo de porcentaje) o un porcentaje sobre el costo estimado de envío. Poner en 0.00 o 0.00% para deshabilitar.'|trans({}, 'Modules.Rgocaepak.Actions')}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                        <a class="btn btn-outline-secondary" id="form-page-back-button" href="{{ backroute }}">{{ 'Volver'|trans({}, 'Modules.Rgocaepak.Actions') }}</a>
+                        <button class="btn btn-primary float-right" id="form-page-save-button">{{ 'Guardar'|trans({}, 'Modules.Rgocaepak.Actions') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
+
+{% endblock %}

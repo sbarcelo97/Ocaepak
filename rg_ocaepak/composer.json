@@ -1,0 +1,18 @@
+{
+  "name": "region-global/oca-epak",
+  "description": "Oca ePak module for Prestashop",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Region Global"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "RgOcaEpak\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+admin_rg_ocaepak_index:
+  path: /ocaepak
+  methods: [GET]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::index
+
+admin_rg_ocaepak_save:
+  path: /ocaepak
+  methods: [ POST ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::save
+
+admin_rg_ocaepak_delete_operative:
+  path: /ocaepak/operatives
+  methods: [ GET ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::deleteOperatives
+
+admin_rg_ocaepak_orders_print:
+  path: /ocaepak/orders/print
+  methods: [ GET , POST]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakOrdersController::submitOrders
+
+admin_rg_ocaepak_add_operative:
+  path: /ocaepak/operatives/add
+  methods: [ GET ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::addUpdateOperative
+
+admin_rg_ocaepak_add_operative_save:
+  path: /ocaepak/operatives/add
+  methods: [ POST ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::addUpdateOperative
+
+admin_rg_ocaepak_update_operative:
+  path: /ocaepak/operatives/update
+  methods: [ GET ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::addUpdateOperative
+
+admin_rg_ocaepak_update_operative_save:
+  path: /ocaepak/operatives/update
+  methods: [ POST ]
+  controller: RgOcaEpak\Controllers\Admin\RgOcaEpakController::addUpdateOperative
+

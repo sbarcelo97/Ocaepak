@@ -54,7 +54,7 @@ class Rg_OcaEpak extends CarrierModule
         $this->version = '1.0.0';
         $this->author = 'Region Global';
         $this->need_instance = 1;
-        $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => '1.7');
         $this->bootstrap = true;
         if (!class_exists('OcaCarrierTools')) {
             include_once _PS_MODULE_DIR_ . "{$this->name}/src/Classes/OcaCarrierTools.php";
@@ -95,22 +95,6 @@ class Rg_OcaEpak extends CarrierModule
         }
 
         $db = Db::getInstance();
-        $tab = new Tab();
-        $tab2 = new Tab();
-        $tab->active = 1;
-        $tab2->active = 1;
-        $tab->class_name = 'AdminOcaEpak';
-        $tab2->class_name = 'AdminOcaOrder';
-        $tab->name = array();
-        $tab2->name = array();
-        foreach (Language::getLanguages(true) as $lang) {
-            $tab->name[$lang['id_lang']] = 'Oca ePak';
-            $tab2->name[$lang['id_lang']] = 'Oca ePak Orders';
-        }
-        $tab->id_parent = -1;
-        $tab2->id_parent = -1;
-        $tab->module = $this->name;
-        $tab2->module = $this->name;
         return (
             $db->Execute(
                 OcaCarrierTools::interpolateSqlFile($this->name, 'create-operatives-table', array(
@@ -146,12 +130,7 @@ class Rg_OcaEpak extends CarrierModule
                 ))
             ) AND
             parent::install() AND
-            $tab->add() AND
-            $tab2->add() AND
-            ( _PS_VERSION_ < 1.7 ?
-                $this->registerHook('displayCarrierList')
-                : $this->registerHook('displayCarrierExtraContent')
-            ) AND
+            $this->registerHook('displayCarrierExtraContent') AND
             $this->registerHook('displayAdminOrder') AND
             $this->registerHook('displayOrderDetail') AND
             $this->registerHook('actionAdminPerformanceControllerBefore') AND
@@ -216,17 +195,6 @@ class Rg_OcaEpak extends CarrierModule
      {
         $db = Db::getInstance();
         OcaEpakOperative::purgeCarriers();
-        $id_tab = (int)Tab::getIdFromClassName('AdminOcaEpak');
-        if ($id_tab) {
-            $tab = new Tab($id_tab);
-            $tab->delete();
-        }
-        $id_tab = (int)Tab::getIdFromClassName('AdminOcaOrder');
-        if ($id_tab) {
-            $tab = new Tab($id_tab);
-            $tab->delete();
-        }
-
         return (
             parent::uninstall()
             AND $db->Execute(
@@ -355,14 +323,15 @@ class Rg_OcaEpak extends CarrierModule
     }
 
     public function hookactionAdminControllerSetMedia(){
-        $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/adminjs.js');
+        if(Tools::getValue('controller') == ''){
+            $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/adminjs.js');
+        }
     }
-
 
     /**
      * @throws SmartyException
      */
-    protected function validateConfig( $boxes)
+    protected function validateConfig($boxes)
     {
         $error = [];
 
@@ -1165,11 +1134,7 @@ class Rg_OcaEpak extends CarrierModule
         ) {
             return false;
         }
-        $customer = isset($this->context->customer->id)? new Customer($this->context->customer->id) : null;
-        if (Configuration::get('PS_SHIPPING_FREE_PRICE')>0 && $cart->getOrderTotal(true,Cart::BOTH_WITHOUT_SHIPPING)>= Configuration::get('PS_SHIPPING_FREE_PRICE')
-        &&(is_null($customer) or !in_array($customer->id_default_group,[4,5]))){
-            return 0;
-        }
+        
 
         if ($carrier->shipping_method == Carrier::SHIPPING_METHOD_PRICE) {
             return $shipping_cost;

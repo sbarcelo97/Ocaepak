@@ -19,15 +19,16 @@ use RgOcaEpak\Classes\OcaEpakOrder;
 use RgOcaEpak\Classes\OcaCarrierTools;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use ZipArchive;
 
 
 class RgOcaEpakOrdersController extends Controller
 {
 
-public function submitOrders(){
+public function submitOrders(Request $request){
     $stickers = [];
-    foreach ($_GET['order_orders_bulk'] as $order_id) {
+    foreach ($request->request->get('order_orders_bulk') as $order_id) {
         $order = new Order($order_id);
         $carrier = new Carrier($order->id_carrier);
         $op = OcaEpakOperative::getByFieldId('carrier_reference', $carrier->id_reference);

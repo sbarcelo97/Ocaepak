@@ -308,8 +308,13 @@ class Rg_OcaEpak extends CarrierModule
     public function hookactionOrderGridDefinitionModifier($params){
         $params['definition']->getBulkActions()
         ->add(
-            (new \RgOcaEpak\Grid\Action\Bulk\ImprimirBulkAction('imprimir'))
+            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('imprimir'))
                 ->setName('Imprimir Etiquetas Oca')
+                ->setOptions([
+                    // in most cases submit action should be implemented by module
+                    'submit_route' => 'admin_rg_ocaepak_orders_print',
+                    'route_params'=> ['order_id'=>'order_id'],
+                ])
 
     );
     }

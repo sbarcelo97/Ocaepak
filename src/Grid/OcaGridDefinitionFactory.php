@@ -65,7 +65,6 @@ class OcaGridDefinitionFactory extends AbstractGridDefinitionFactory
                         'actions' => $this->getRowActions(),
                     ])
             );
-            ;
     }
 
 

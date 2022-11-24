@@ -1,10 +1,10 @@
 
 <div class="panel" id="oca-box-1">
     <div class="panel-heading">
-        {l s='Caja' mod='ocaepak'} <span class="num">1</span>
+        {l s='Caja' mod='rg_ocaepak'} <span class="num">1</span>
         <span class="panel-heading-action">
             <a class="list-toolbar-btn box-delete">
-                <span title="{l s='Borrar' mod='ocaepak'}">
+                <span title="{l s='Borrar' mod='rg_ocaepak'}">
                     <i class="process-icon-delete"></i>
                 </span>
             </a>
@@ -12,7 +12,7 @@
     </div>
     <div class="form-group">
         <label for="boxes-box" class="control-label col-lg-3 ">
-            {l s='Dimensiones' mod='ocaepak'}
+            {l s='Dimensiones' mod='rg_ocaepak'}
         </label>
         <div class="col-lg-9">
             <input type="text" name="oca-box-l-1" id="oca-box-l-1" value="" class="fixed-width-sm" style="display: inline-block;" size="8"> cm ×
@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         <label for="boxes-box" class="control-label col-lg-3 ">
-            {l s='Peso máximo del contenido' mod='ocaepak'}
+            {l s='Peso máximo del contenido' mod='rg_ocaepak'}
         </label>
         <div class="col-lg-9">
             <input type="text" name="oca-box-xw-1" id="oca-box-xw-1" value="" class="fixed-width-sm" style="display: inline-block;" size="8"> kg
@@ -32,7 +32,7 @@
 <div class="row-margin-bottom row-margin-top order_action margin-form">
     <button id="add_oca_box" class="btn btn-default" type="button">
         <i class="icon-plus"></i>
-        {l s='Agregar caja' mod='ocaepak'}
+        {l s='Agregar caja' mod='rg_ocaepak'}
     </button>
 </div>
 {literal}<script>

@@ -116,12 +116,6 @@ public function submitOrders(Request $request){
     }
     if(!empty($stickers)){
         ob_start();
-        $sql = 'SELECT o.id_order, COUNT(cp.id_product) as \'cant\' FROM ps_orders o JOIN ps_cart_product cp ON (o.`id_cart` = cp.`id_cart`)
-                 WHERE id_order IN ('.implode(',',array_keys($stickers)).')'.
-            'GROUP BY (cp.id_cart)
-                 ORDER BY o.id_order';
-        $cants = Db::getInstance()->executeS($sql);
-        $cont=1;
         $datadir = __DIR__.'/etiquetas/';
         $files = glob($datadir.'*'); //obtenemos todos los nombres de los ficheros
         foreach($files as $file){

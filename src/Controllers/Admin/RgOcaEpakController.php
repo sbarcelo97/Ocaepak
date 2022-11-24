@@ -8,6 +8,7 @@ use RgOcaEpak\Form\Type\RgOcaepakRegistrationType;
 use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteria;
 use ModuleCore;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 class RgOcaEpakController extends FrameworkBundleAdminController
 {
@@ -38,9 +39,10 @@ class RgOcaEpakController extends FrameworkBundleAdminController
         ]);
     }
 
-    public function save(){
-        if($params= $_POST['rg_ocaepak_registration']){
-            $validation = $this->validateForm($params);
+    public function save(Request $request){
+        $parameters = $request->request->all();
+        if($params= $parameters['rg_ocaepak_registration']){
+            $validation = $this->validateForm($parameters);
             $errors= $validation['errors'];
             $boxes= $validation['boxes'];
             if(empty($errors)) {
@@ -73,9 +75,9 @@ class RgOcaEpakController extends FrameworkBundleAdminController
         }
     }
 
-    public function deleteOperatives()
+    public function deleteOperatives(Request $request)
     {
-        $operative_id = $_GET['id'];
+        $operative_id = $request->query->get('id');
         $operative = new OcaEpakOperative($operative_id);
         if($operative->carrier_reference) {
             $operative->delete();
@@ -83,9 +85,9 @@ class RgOcaEpakController extends FrameworkBundleAdminController
         return $this->redirectToRoute('admin_rg_ocaepak_index');
     }
 
-    public function addUpdateOperative(){
-        if(!empty($_POST)){
-            $operative_data = $_POST['rg_ocaepak_operative'];
+    public function addUpdateOperative(Request $request){
+        if(!empty($request->request->all())){
+            $operative_data = $request->request->get('rg_ocaepak_operative');
             $op =isset($_REQUEST['id'])? new OcaEpakOperative($_REQUEST['id']): new OcaEpakOperative();
             $op->reference = $operative_data['OP_REFERENCE'];
             $shopContext = $this->get('prestashop.adapter.shop.context');
@@ -101,8 +103,8 @@ class RgOcaEpakController extends FrameworkBundleAdminController
                 return $this->redirectToRoute('admin_rg_ocaepak_index');
             }
         }
-        if(isset($_GET['id'])){
-            $op = new OcaEpakOperative($_GET['id']);
+        if($request->query->get('id') !== null){
+            $op = new OcaEpakOperative($request->query->get('id'));
             $params = ['OP_REFERENCE'=>$op->reference, 'OP_DESC'=>$op->description, 'OP_FEE'=>$op->addfee, 'OP_TYPE'=>$op->type, 'OP_INSURED'=>$op->insured];
             $form = $this->createForm(RgOcaepakOperativeType::class , $params);
         }else{
@@ -160,15 +162,15 @@ class RgOcaEpakController extends FrameworkBundleAdminController
         if(!isset($this->module)){
             $this->module=ModuleCore::getInstanceByName('rg_ocaepak');
         }
-        foreach ($_POST as $key=>$value){
+        foreach ($params as $key=>$value){
             if(str_contains($key,'oca-box-l')) {
                 $i = substr($key,-1,1);
                 $boxes[] = [
-                    'l' => $_POST['oca-box-l-' . $i],
-                    'd' => $_POST['oca-box-d-' . $i],
-                    'h' => $_POST['oca-box-h-' . $i],
-                    'xw' => $_POST['oca-box-xw-' . $i],
-                    'isd'=>isset($_POST['oca-box-isd-'.$i])?1:0
+                    'l' => $params['oca-box-l-' . $i],
+                    'd' => $params['oca-box-d-' . $i],
+                    'h' => $params['oca-box-h-' . $i],
+                    'xw' => $params['oca-box-xw-' . $i],
+                    'isd'=>isset($params['oca-box-isd-'.$i])?1:0
                 ];
             }
         }
@@ -181,7 +183,8 @@ class RgOcaEpakController extends FrameworkBundleAdminController
             }
         }
 
-        if(empty($boxes)&& ($params['RG_OCAEPAK_ADMISSIONS_ENABLED'] or $params['RG_OCAEPAK_PICKUPS_ENABLED'])){
+        $config =$params['rg_ocaepak_registration'];
+        if(empty($boxes)&& ($config['RG_OCAEPAK_ADMISSIONS_ENABLED'] or $config['RG_OCAEPAK_PICKUPS_ENABLED'])){
             $errors[]='Debe agregar al menos 1 caja';
         }
 

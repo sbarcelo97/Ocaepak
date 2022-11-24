@@ -1,11 +1,11 @@
 
 <div class="panel card">
     <div class="panel-heading card-header">
-        <img src="{$base_url}/modules/{$moduleName|trim|escape:'htmlall':'UTF-8'}/logo.gif" alt="logo" /> {l s='Información OCA ePak ' mod='ocaepak'}
+        <img src="{$base_url}/modules/{$moduleName|trim|escape:'htmlall':'UTF-8'}/logo.gif" alt="logo" /> {l s='Información OCA ePak ' mod='rg_ocaepak'}
     </div>
     <div id="oca-ajax-container" class="text-center">
-        <h2>{l s='Cargando' mod='ocaepak'}...</h2>
-        <img src="{$base_url}/img/loadingAnimation.gif" alt="{l s='Cargando' mod='ocaepak'}">
+        <h2>{l s='Cargando' mod='rg_ocaepak'}...</h2>
+        <img src="{$base_url}/img/loadingAnimation.gif" alt="{l s='Cargando' mod='rg_ocaepak'}">
     </div>
 </div>
 <script>{literal}
@@ -26,7 +26,7 @@
 {if $ocaOrdersEnabled}
     <div class="panel card">
         <div class="panel-heading card-header">
-            <img src="{$base_url}/modules/{$moduleName|trim|escape:'htmlall':'UTF-8'}/logo.gif" alt="logo" /> {l s='Ordenes Oca Epak' mod='ocaepak'}
+            <img src="{$base_url}/modules/{$moduleName|trim|escape:'htmlall':'UTF-8'}/logo.gif" alt="logo" /> {l s='Ordenes Oca Epak' mod='rg_ocaepak'}
         </div>
         {if $ocaGuiHeader}
             <div class="form-group">
@@ -36,17 +36,17 @@
         {if $ocaOrderStatus === 'submitted'}
             <div class="form-group">
                 <div>
-                    {l s='ID Orden OCA' mod='ocaepak'}: {$ocaOrder->reference|escape:'htmlall':'UTF-8'}<br />
-                    {l s='Estado' mod='ocaepak'}: {$ocaStatus|escape:'htmlall':'UTF-8'}<br />
+                    {l s='ID Orden OCA' mod='rg_ocaepak'}: {$ocaOrder->reference|escape:'htmlall':'UTF-8'}<br />
+                    {l s='Estado' mod='rg_ocaepak'}: {$ocaStatus|escape:'htmlall':'UTF-8'}<br />
                     {if $ocaAccepts}
-                        {l s='Paquetes ingresados' mod='ocaepak'}: {$ocaAccepts|escape:'htmlall':'UTF-8'}<br />
+                        {l s='Paquetes ingresados' mod='rg_ocaepak'}: {$ocaAccepts|escape:'htmlall':'UTF-8'}<br />
                     {/if}
                     {if $ocaRejects}
-                        {l s='Paquetes rechazados' mod='ocaepak'}: {$ocaRejects|escape:'htmlall':'UTF-8'}<br />
+                        {l s='Paquetes rechazados' mod='rg_ocaepak'}: {$ocaRejects|escape:'htmlall':'UTF-8'}<br />
                     {/if}
-                    {l s='Seguimiento' mod='ocaepak'}: <a href="https://www1.oca.com.ar/OEPTrackingWeb/trackingenvio.asp?numero1={$ocaOrder->tracking|escape:'htmlall':'UTF-8'}" target="_blank">{$ocaOrder->tracking|escape:'htmlall':'UTF-8'}</a><br />
-                    <button id="oca-cancel-button" class="btn btn-danger" onclick="cancelOcaOrder()">{l s='Cancelar Orden' mod='ocaepak'}</button>
-                    <button id="oca-print-button" class="btn btn-primary" onclick="printIframe()">{l s='Imprimir etiqueta' mod='ocaepak'}</button><br />
+                    {l s='Seguimiento' mod='rg_ocaepak'}: <a href="https://www1.oca.com.ar/OEPTrackingWeb/trackingenvio.asp?numero1={$ocaOrder->tracking|escape:'htmlall':'UTF-8'}" target="_blank">{$ocaOrder->tracking|escape:'htmlall':'UTF-8'}</a><br />
+                    <button id="oca-cancel-button" class="btn btn-danger" onclick="cancelOcaOrder()">{l s='Cancelar Orden' mod='rg_ocaepak'}</button>
+                    <button id="oca-print-button" class="btn btn-primary" onclick="printIframe()">{l s='Imprimir etiqueta' mod='rg_ocaepak'}</button><br />
                     <iframe src="{$stickerUrl|escape:'htmlall':'UTF-8'}" id="oca-sticker" frameborder="0" style="margin: 18px; width: 0; height: 0; max-width: 100%;"></iframe>
                     {literal}<script>
                         $('#oca-print-button, #oca-cancel-button').hide();
@@ -57,7 +57,7 @@
                                 $(this).width($(this).contents().width());
                                 $('#oca-print-button, #oca-cancel-button').show();
                             } else {
-                                $('#oca-sticker').hide().after('{/literal}{l s='No hay etiquetas disponibles' mod='ocaepak'}{literal}');
+                                $('#oca-sticker').hide().after('{/literal}{l s='No hay etiquetas disponibles' mod='rg_ocaepak'}{literal}');
                             }
                         });
                         function printIframe() {
@@ -72,7 +72,7 @@
                         }
                         function cancelOcaOrder() {
                             //@todo: only show cancel butten if order cancellable
-                            if (confirm('{/literal}{l s='Esto cancelará la orden de OCA' mod='ocaepak'}{literal}')) {
+                            if (confirm('{/literal}{l s='Esto cancelará la orden de OCA' mod='rg_ocaepak'}{literal}')) {
                                 window.location.href = 'index.php?controller=AdminOrders&id_order={/literal}{$ocaOrderId|escape:'htmlall':'UTF-8'}{literal}&vieworder&oca-order-cancel=1&token={/literal}{$smarty.get.token|escape:'htmlall':'UTF-8'} {literal}#oca-epak-orders';
                             }
                         }

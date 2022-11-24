@@ -1,10 +1,10 @@
 
 
 <div id="oca-delivery-options-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}">
-    <p class="carrier_title">{l s='Selecciona tu sucursal:' mod='ocaepak'}</p>
+    <p class="carrier_title">{l s='Selecciona tu sucursal:' mod='rg_ocaepak'}</p>
     {if $ocaepak_branch_sel_type == 0}
         <div class="row">
-            <label for="ocaStateSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="col-xs-2">{l s='Provincia' mod='ocaepak'}:</label>
+            <label for="ocaStateSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="col-xs-2">{l s='Provincia' mod='rg_ocaepak'}:</label>
             <div class="col-xs-10 radius-input">
                 <select name="oca_state" id="ocaStateSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="chosen">
                     {foreach $ocaepak_states as $state}
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="row">
-            <label for="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="col-xs-2">{l s='Sucursal' mod='ocaepak'}:</label>
+            <label for="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="col-xs-2">{l s='Sucursal' mod='rg_ocaepak'}:</label>
             <div class="col-xs-10 radius-input">
                 <select name="oca_branch" id="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="chosen"></select>
             </div>
@@ -23,7 +23,7 @@
 {*    <div id="oca-map-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}"></div>*}
     {if $ocaepak_branch_sel_type == 1}
         <div class="radius-input">
-            <label for="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}">{l s='Sucursal seleccionada' mod='ocaepak'}:</label>
+            <label for="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}">{l s='Sucursal seleccionada' mod='rg_ocaepak'}:</label>
             <select name="branch" id="ocaBranchSelect-{$currentOcaCarrier|escape:'htmlall':'UTF-8'}" class="form-control"></select>
         </div>
     {/if}

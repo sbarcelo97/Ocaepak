@@ -51,7 +51,7 @@ class Rg_OcaEpak extends CarrierModule
     {
         $this->name = 'rg_ocaepak';            //DON'T CHANGE!!
         $this->tab = 'shipping_logistics';
-        $this->version = '1.0';
+        $this->version = '1.0.0';
         $this->author = 'Region Global';
         $this->need_instance = 1;
         $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');

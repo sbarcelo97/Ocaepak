@@ -285,7 +285,7 @@ class Rg_OcaEpak extends CarrierModule
                     'submit_route' => 'admin_rg_ocaepak_orders_print',
                     'route_params' => ['order_id' => 'order_id'],
                 ])
-    );
+        );
     }
 
     /**
@@ -773,7 +773,7 @@ class Rg_OcaEpak extends CarrierModule
             (
                 (
                     Configuration::get(self::CONFIG_PREFIX . 'ADMISSIONS_ENABLED')
-                    && (in_array($op->type, ['SaP', 'SaS']))
+                    && in_array($op->type, ['SaP', 'SaS'])
                 ) || (
                     Configuration::get(self::CONFIG_PREFIX . 'PICKUPS_ENABLED')
                     && in_array($op->type, ['PaP', 'PaS'])
@@ -997,8 +997,7 @@ class Rg_OcaEpak extends CarrierModule
                         }
                     }
 
-                    return $this->display(__FILE__, 'displayHeader.tpl') . $this->display(__FILE__,
-                            'displayCarrierList.tpl');
+                    return $this->display(__FILE__, 'displayHeader.tpl') . $this->display(__FILE__, 'displayCarrierList.tpl');
                 } else {
                     return $this->display(__FILE__, 'displayCarrierList.tpl');
                 }
@@ -1156,7 +1155,7 @@ class Rg_OcaEpak extends CarrierModule
         }
         try {
             $relay = OcaEpakRelay::getByCartId($cart->id);
-            if ((in_array($op->type, ['SaS', 'PaS']))) {
+            if (in_array($op->type, ['SaS', 'PaS'])) {
                 if (!$relay) {
                     $branches = $this->executeWebservice('GetCentrosImposicionPorCP', [
                         'CodigoPostal' => $postcode,

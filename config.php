@@ -45,6 +45,7 @@ return (new PhpCsFixer\Config())
                 'use',
             ]
         ],
+        'no_useless_concat_operator'=> true,
         // 'no_leading_import_slash' => true,
         // 'no_leading_namespace_whitespace' => true,
         // 'no_mixed_echo_print' => array('use' => 'echo'),

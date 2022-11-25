@@ -46,13 +46,7 @@ class RgOcaEpakOrdersController extends Controller
                 } else {
                     $relayId = null;
                 }
-                $cartData = OcaCarrierTools::getCartPhysicalData(
-                $cart,
-                $carrier->id,
-                $this->get('prestashop.adapter.legacy.configuration')->get(Rg_OcaEpak::CONFIG_PREFIX . 'DEFWEIGHT'),
-                $this->get('prestashop.adapter.legacy.configuration')->get(Rg_OcaEpak::CONFIG_PREFIX . 'DEFVOLUME'),
-                Rg_OcaEpak::PADDING
-            );
+                $cartData = OcaCarrierTools::getCartPhysicalData($cart, $carrier->id, $this->get('prestashop.adapter.legacy.configuration')->get(Rg_OcaEpak::CONFIG_PREFIX . 'DEFWEIGHT'), $this->get('prestashop.adapter.legacy.configuration')->get(Rg_OcaEpak::CONFIG_PREFIX . 'DEFVOLUME'), Rg_OcaEpak::PADDING);
                 $module = ModuleCore::getInstanceByName('rg_ocaepak');
                 $cartData['address'] = $address;
                 if ($preOrder = $module->getValidateOcaForm($cartData)) {
@@ -78,7 +72,7 @@ class RgOcaEpakOrdersController extends Controller
                             throw new Exception('Error generating OCA order');
                         }
                         if (isset($data->Errores)) {
-                            throw new Exception('Error generating OCA order' . ': ' . (string) $data->Errores->Error->Descripcion);
+                            throw new Exception('Error generating OCA order: ' . (string) $data->Errores->Error->Descripcion);
                         }
                         $ocaOrder = new OcaEpakOrder();
                         $ocaOrder->id_order = $order->id;
@@ -88,10 +82,10 @@ class RgOcaEpakOrdersController extends Controller
                         $ocaOrder->save();
                         if (!$order->shipping_number && $ocaOrder->tracking) {
                             $id_order_carrier = Db::getInstance()->getValue('
-                        SELECT `id_order_carrier`
-                        FROM `' . _DB_PREFIX_ . 'order_carrier`
-                        WHERE `id_order` = ' . (int) $order->id
-                        );
+                            SELECT `id_order_carrier`
+                            FROM `' . _DB_PREFIX_ . 'order_carrier`
+                            WHERE `id_order` = ' . (int) $order->id
+                            );
                             if ($id_order_carrier) {
                                 $_GET['tracking_number'] = $ocaOrder->tracking;
                                 $_GET['submitShippingNumber'] = 1;
@@ -117,7 +111,7 @@ class RgOcaEpakOrdersController extends Controller
         if (!empty($stickers)) {
             ob_start();
             $datadir = __DIR__ . '/etiquetas/';
-            $files = glob($datadir . '*'); //obtenemos todos los nombres de los ficheros
+            $files = glob($datadir . '*'); // gets all files
             foreach ($files as $file) {
                 if (is_file($file)) {
                     unlink($file);

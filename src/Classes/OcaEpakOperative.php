@@ -77,12 +77,12 @@ class OcaEpakOperative extends ObjectModel
         $carrier = new Carrier();
         $carrier->name = $module::CARRIER_NAME;
         $carrier->id_tax_rules_group = 0;
-        //$carrier->id_zone = Country::getIdZone(Country::getByIso('AR'));
+        // $carrier->id_zone = Country::getIdZone(Country::getByIso('AR'));
         $carrier->active = true;
         $carrier->deleted = false;
         $carrier->url = $module::TRACKING_URL;
         $carrier->delay = [];
-        //$carrier->delay[Language::getIsoById(Configuration::get('PS_LANG_DEFAULT'))] = Rg_OcaEpak::CARRIER_DELAY;
+        // $carrier->delay[Language::getIsoById(Configuration::get('PS_LANG_DEFAULT'))] = Rg_OcaEpak::CARRIER_DELAY;
         $carrier->shipping_handling = false;
         $carrier->range_behavior = 0;
         $carrier->is_module = true;
@@ -108,7 +108,7 @@ class OcaEpakOperative extends ObjectModel
         if (!$carrier->add()) {
             return false;
         }
-        $carrier = new Carrier($carrier->id);   //reload carrier to get reference
+        $carrier = new Carrier($carrier->id);   // reload carrier to get reference
 
         return
             (method_exists('Carrier', 'setGroups') ? $carrier->setGroups($groups) : $this->setCarrierGroups($carrier, $groups)) and
@@ -156,7 +156,7 @@ class OcaEpakOperative extends ObjectModel
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
         if (!in_array(
             $field,
-            ['carrier_reference', 'reference', 'description'/*'addfee', 'id_shop'*/]
+            ['carrier_reference', 'reference', 'description']
         )) {
             return false;
         }
@@ -279,14 +279,14 @@ class OcaEpakOperative extends ObjectModel
     protected function setCarrierGroups($carrier, $groups, $delete = true)
     {
         if ($delete) {
-            Db::getInstance()->execute('DELETE FROM ' . pSQL(_DB_PREFIX_) . 'carrier_group WHERE id_carrier = ' . (int)$carrier->id);
+            Db::getInstance()->execute('DELETE FROM ' . pSQL(_DB_PREFIX_) . 'carrier_group WHERE id_carrier = ' . (int) $carrier->id);
         }
         if (!is_array($groups) || !count($groups)) {
             return true;
         }
-        $sql = 'INSERT INTO '.pSQL(_DB_PREFIX_).'carrier_group (id_carrier, id_group) VALUES ';
+        $sql = 'INSERT INTO ' . pSQL(_DB_PREFIX_) . 'carrier_group (id_carrier, id_group) VALUES ';
         foreach ($groups as $id_group) {
-            $sql .= '(' . (int)$carrier->id . ', ' . (int)$id_group . '),';
+            $sql .= '(' . (int) $carrier->id . ', ' . (int) $id_group . '),';
         }
 
         return Db::getInstance()->execute(rtrim($sql, ','));

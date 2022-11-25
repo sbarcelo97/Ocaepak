@@ -7,7 +7,7 @@ use PrestaShop\PrestaShop\Adapter\Entity\Db;
 
 class OcaEpakBranches
 {
-    public static $expiry = 24; //hours
+    public static $expiry = 24; // hours
 
     /**
      * @throws PrestaShopDatabaseException
@@ -88,7 +88,7 @@ class OcaEpakBranches
                     '{Sucursal}' => trim($branch['Sucursal']),
                     '{Calle}' => trim($branch['Calle']),
                     '{Numero}' => trim($branch['Numero']),
-                    //'{Piso}' => trim($branch['Piso']),
+                    // '{Piso}' => trim($branch['Piso']),
                     '{Localidad}' => trim($branch['Localidad']),
                     '{Provincia}' => trim($branch['Provincia']),
                     '{Latitud}' => trim($branch['Latitud']),

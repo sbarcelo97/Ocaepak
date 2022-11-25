@@ -37,7 +37,7 @@ class OcaEpakOrder extends ObjectModel
     public $reference;
     public $operation_code;
     public $tracking;
-    //public $id_shop;
+    // public $id_shop;
 
     /**
      * @see ObjectModel::$definition
@@ -51,7 +51,7 @@ class OcaEpakOrder extends ObjectModel
             'reference' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
             'operation_code' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
             'tracking' => ['type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false],
-            //'id_shop' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
+            // 'id_shop' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
         ],
     ];
 
@@ -61,10 +61,7 @@ class OcaEpakOrder extends ObjectModel
      */
     public static function getByFieldId($field, $id_field)
     {
-        if (!in_array(
-                $field,
-                ['id_order', 'reference', 'tracking', 'operation_code'/*'status'*/]
-        )) {
+        if (!in_array($field, ['id_order', 'reference', 'tracking', 'operation_code'])) {
             return false;
         }
         $query = OcaCarrierTools::interpolateSql(
@@ -105,9 +102,7 @@ class OcaEpakOrder extends ObjectModel
             : '1'
         );
         $address = [];
-        foreach (
-            ['street', 'number', 'floor', 'apartment', 'locality', 'province', 'observations'] as $conf
-        ) {
+        foreach (['street', 'number', 'floor', 'apartment', 'locality', 'province', 'observations'] as $conf) {
             $address[$conf] = self::cleanOcaAttribute($data[$conf], constant('self::OCA_' . Tools::strtoupper($conf) . '_LENGTH'));
         }
         $address['firstname'] = self::cleanOcaAttribute($data['customer']->firstname, self::OCA_NAME_LENGTH);
@@ -115,7 +110,7 @@ class OcaEpakOrder extends ObjectModel
         $address['email'] = self::cleanOcaAttribute($data['customer']->email, self::OCA_EMAIL_LENGTH);
         $address['phone'] = self::cleanOcaAttribute($data['address']->phone, self::OCA_PHONE_LENGTH);
         $address['mobile'] = self::cleanOcaAttribute($data['address']->phone_mobile, self::OCA_MOBILE_LENGTH);
-        $reference = self::cleanOcaAttribute((Tools::strlen(trim($data['address']->dni)) ? $data['address']->dni : $data['order']->reference), self::OCA_REMIT_LENGTH);
+        $reference = self::cleanOcaAttribute(Tools::strlen(trim($data['address']->dni)) ? $data['address']->dni : $data['order']->reference, self::OCA_REMIT_LENGTH);
 
         ob_start(); ?>
         <ROWS>
@@ -230,7 +225,7 @@ class OcaEpakOrder extends ObjectModel
                         break;
                     case 'administrative_area_level_1':
                         $ocaAddress['geocoded state'] = $component['long_name'];
-                        //$ocaAddress['geocoded'] = true;
+                        //  $ocaAddress['geocoded'] = true;
                         break;
                     case 'country':
                         if (trim($component['long_name']) != 'Argentina') {

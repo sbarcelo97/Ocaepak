@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -33,7 +32,6 @@ abstract class AbstractReader
     /**
      * AbstractReader constructor.
      *
-     * @param PdfParser $parser
      * @throws CrossReferenceException
      * @throws PdfTypeException
      */
@@ -64,30 +62,16 @@ abstract class AbstractReader
         try {
             $trailerKeyword = $this->parser->readValue(null, PdfToken::class);
             if ($trailerKeyword->value !== 'trailer') {
-                throw new CrossReferenceException(
-                    \sprintf(
-                        'Unexpected end of cross reference. "trailer"-keyword expected, got: %s.',
-                        $trailerKeyword->value
-                    ),
-                    CrossReferenceException::UNEXPECTED_END
-                );
+                throw new CrossReferenceException(\sprintf('Unexpected end of cross reference. "trailer"-keyword expected, got: %s.', $trailerKeyword->value), CrossReferenceException::UNEXPECTED_END);
             }
         } catch (PdfTypeException $e) {
-            throw new CrossReferenceException(
-                'Unexpected end of cross reference. "trailer"-keyword expected, got an invalid object type.',
-                CrossReferenceException::UNEXPECTED_END,
-                $e
-            );
+            throw new CrossReferenceException('Unexpected end of cross reference. "trailer"-keyword expected, got an invalid object type.', CrossReferenceException::UNEXPECTED_END, $e);
         }
 
         try {
             $trailer = $this->parser->readValue(null, PdfDictionary::class);
         } catch (PdfTypeException $e) {
-            throw new CrossReferenceException(
-                'Unexpected end of cross reference. Trailer not found.',
-                CrossReferenceException::UNEXPECTED_END,
-                $e
-            );
+            throw new CrossReferenceException('Unexpected end of cross reference. Trailer not found.', CrossReferenceException::UNEXPECTED_END, $e);
         }
 
         $this->trailer = $trailer;

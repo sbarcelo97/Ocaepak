@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -20,7 +19,8 @@ class Flate implements FilterInterface
      *
      * Used for testing purpose.
      *
-     * @return boolean
+     * @return bool
+     *
      * @internal
      */
     protected function extensionLoaded()
@@ -32,7 +32,9 @@ class Flate implements FilterInterface
      * Decodes a flate compressed string.
      *
      * @param string|false $data The input string
+     *
      * @return string
+     *
      * @throws FlateException
      */
     public function decode($data)
@@ -59,7 +61,7 @@ class Flate implements FilterInterface
                 $oDataLen = strlen($oData);
                 while ($tries < 6 && ($data === false || (strlen($data) < ($oDataLen - $tries - 1)))) {
                     $data = @(gzinflate(substr($oData, $tries)));
-                    $tries++;
+                    ++$tries;
                 }
 
                 // let's use this fallback only if the $data is longer than the original data
@@ -68,17 +70,11 @@ class Flate implements FilterInterface
                 }
 
                 if (!$data) {
-                    throw new FlateException(
-                        'Error while decompressing stream.',
-                        FlateException::DECOMPRESS_ERROR
-                    );
+                    throw new FlateException('Error while decompressing stream.', FlateException::DECOMPRESS_ERROR);
                 }
             }
         } else {
-            throw new FlateException(
-                'To handle FlateDecode filter, enable zlib support in PHP.',
-                FlateException::NO_ZLIB
-            );
+            throw new FlateException('To handle FlateDecode filter, enable zlib support in PHP.', FlateException::NO_ZLIB);
         }
 
         return $data;

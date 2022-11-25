@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -45,8 +44,6 @@ class PdfReader
 
     /**
      * PdfReader constructor.
-     *
-     * @param PdfParser $parser
      */
     public function __construct(PdfParser $parser)
     {
@@ -77,6 +74,7 @@ class PdfReader
      * Get the PDF version.
      *
      * @return string
+     *
      * @throws PdfParserException
      */
     public function getPdfVersion()
@@ -88,6 +86,7 @@ class PdfReader
      * Get the page count.
      *
      * @return int
+     *
      * @throws PdfTypeException
      * @throws CrossReferenceException
      * @throws PdfParserException
@@ -110,7 +109,9 @@ class PdfReader
      * Get a page instance.
      *
      * @param int $pageNumber
+     *
      * @return Page
+     *
      * @throws PdfTypeException
      * @throws CrossReferenceException
      * @throws PdfParserException
@@ -119,19 +120,11 @@ class PdfReader
     public function getPage($pageNumber)
     {
         if (!\is_numeric($pageNumber)) {
-            throw new \InvalidArgumentException(
-                'Page number needs to be a number.'
-            );
+            throw new \InvalidArgumentException('Page number needs to be a number.');
         }
 
         if ($pageNumber < 1 || $pageNumber > $this->getPageCount()) {
-            throw new \InvalidArgumentException(
-                \sprintf(
-                    'Page number "%s" out of available page range (1 - %s)',
-                    $pageNumber,
-                    $this->getPageCount()
-                )
-            );
+            throw new \InvalidArgumentException(\sprintf('Page number "%s" out of available page range (1 - %s)', $pageNumber, $this->getPageCount()));
         }
 
         $this->readPages();
@@ -142,7 +135,7 @@ class PdfReader
             $readPages = function ($kids) use (&$readPages) {
                 $kids = PdfArray::ensure($kids);
 
-                /** @noinspection LoopWhichDoesNotLoopInspection */
+                /* @noinspection LoopWhichDoesNotLoopInspection */
                 foreach ($kids->value as $reference) {
                     $reference = PdfIndirectObjectReference::ensure($reference);
                     $object = $this->parser->getIndirectObject($reference->value);
@@ -155,10 +148,7 @@ class PdfReader
                     return $object;
                 }
 
-                throw new PdfReaderException(
-                    'Kids array cannot be empty.',
-                    PdfReaderException::KIDS_EMPTY
-                );
+                throw new PdfReaderException('Kids array cannot be empty.', PdfReaderException::KIDS_EMPTY);
             };
 
             $page = $this->parser->getIndirectObject($page->value);
@@ -192,6 +182,7 @@ class PdfReader
      * Walk the page tree and resolve all indirect objects of all pages.
      *
      * @param bool $readAll
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      * @throws PdfTypeException

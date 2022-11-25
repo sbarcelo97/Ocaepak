@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -22,10 +21,8 @@ class PdfDictionary extends PdfType
     /**
      * Parses a dictionary of the passed tokenizer, stream-reader and parser.
      *
-     * @param Tokenizer $tokenizer
-     * @param StreamReader $streamReader
-     * @param PdfParser $parser
      * @return bool|self
+     *
      * @throws PdfTypeException
      */
     public static function parse(Tokenizer $tokenizer, StreamReader $streamReader, PdfParser $parser)
@@ -59,7 +56,6 @@ class PdfDictionary extends PdfType
                 break;
             }
 
-
             $value = $parser->readValue();
             if ($value === false) {
                 return false;
@@ -87,7 +83,8 @@ class PdfDictionary extends PdfType
     /**
      * Helper method to create an instance.
      *
-     * @param PdfType[] $entries The keys are the name entries of the dictionary.
+     * @param PdfType[] $entries the keys are the name entries of the dictionary
+     *
      * @return self
      */
     public static function create(array $entries = [])
@@ -103,8 +100,9 @@ class PdfDictionary extends PdfType
      *
      * @param mixed $dictionary
      * @param string $key
-     * @param PdfType|null $default
+     *
      * @return PdfNull|PdfType
+     *
      * @throws PdfTypeException
      */
     public static function get($dictionary, $key, PdfType $default = null)
@@ -124,7 +122,9 @@ class PdfDictionary extends PdfType
      * Ensures that the passed value is a PdfDictionary instance.
      *
      * @param mixed $dictionary
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($dictionary)

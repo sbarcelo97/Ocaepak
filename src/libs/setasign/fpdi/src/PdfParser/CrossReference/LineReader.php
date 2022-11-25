@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -31,7 +30,6 @@ class LineReader extends AbstractReader implements ReaderInterface
     /**
      * LineReader constructor.
      *
-     * @param PdfParser $parser
      * @throws CrossReferenceException
      */
     public function __construct(PdfParser $parser)
@@ -41,7 +39,7 @@ class LineReader extends AbstractReader implements ReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOffsetFor($objectNumber)
     {
@@ -65,8 +63,8 @@ class LineReader extends AbstractReader implements ReaderInterface
     /**
      * Extracts the cross reference data from the stream reader.
      *
-     * @param StreamReader $reader
      * @return string
+     *
      * @throws CrossReferenceException
      */
     protected function extract(StreamReader $reader)
@@ -79,14 +77,11 @@ class LineReader extends AbstractReader implements ReaderInterface
             // 6 = length of "trailer" - 1
             $pos = \max(($bytesPerCycle * $cycles) - 6, 0);
             $trailerPos = \strpos($reader->getBuffer(false), 'trailer', $pos);
-            $cycles++;
+            ++$cycles;
         } while ($trailerPos === false && $reader->increaseLength($bytesPerCycle) !== false);
 
         if ($trailerPos === false) {
-            throw new CrossReferenceException(
-                'Unexpected end of cross reference. "trailer"-keyword not found.',
-                CrossReferenceException::NO_TRAILER_FOUND
-            );
+            throw new CrossReferenceException('Unexpected end of cross reference. "trailer"-keyword not found.', CrossReferenceException::NO_TRAILER_FOUND);
         }
 
         $xrefContent = \substr($reader->getBuffer(false), 0, $trailerPos);
@@ -99,6 +94,7 @@ class LineReader extends AbstractReader implements ReaderInterface
      * Read the cross-reference entries.
      *
      * @param string $xrefContent
+     *
      * @throws CrossReferenceException
      */
     protected function read($xrefContent)
@@ -107,10 +103,7 @@ class LineReader extends AbstractReader implements ReaderInterface
         \preg_match_all("/(\r\n|\n|\r)/", \substr($xrefContent, 0, 100), $m);
 
         if (\count($m[0]) === 0) {
-            throw new CrossReferenceException(
-                'No data found in cross-reference.',
-                CrossReferenceException::INVALID_DATA
-            );
+            throw new CrossReferenceException('No data found in cross-reference.', CrossReferenceException::INVALID_DATA);
         }
 
         // count(array_count_values()) is faster then count(array_unique())
@@ -126,6 +119,7 @@ class LineReader extends AbstractReader implements ReaderInterface
         unset($differentLineEndings, $m);
         if (!\is_array($lines)) {
             $this->offsets = [];
+
             return;
         }
 
@@ -146,7 +140,7 @@ class LineReader extends AbstractReader implements ReaderInterface
                     switch ($pieces[2]) {
                         case 'n':
                             $offsets[$start] = [(int) $pieces[0], (int) $pieces[1]];
-                            $start++;
+                            ++$start;
                             break 2;
                         case 'f':
                             $start++;
@@ -154,11 +148,9 @@ class LineReader extends AbstractReader implements ReaderInterface
                     }
                     // fall through if pieces doesn't match
 
+                    // no break
                 default:
-                    throw new CrossReferenceException(
-                        \sprintf('Unexpected data in xref table (%s)', \implode(' ', $pieces)),
-                        CrossReferenceException::INVALID_DATA
-                    );
+                    throw new CrossReferenceException(\sprintf('Unexpected data in xref table (%s)', \implode(' ', $pieces)), CrossReferenceException::INVALID_DATA);
             }
         }
 

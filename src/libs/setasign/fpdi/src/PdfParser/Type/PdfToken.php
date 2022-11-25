@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -19,6 +18,7 @@ class PdfToken extends PdfType
      * Helper method to create an instance.
      *
      * @param string $token
+     *
      * @return self
      */
     public static function create($token)
@@ -33,7 +33,9 @@ class PdfToken extends PdfType
      * Ensures that the passed value is a PdfToken instance.
      *
      * @param mixed $token
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($token)

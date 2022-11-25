@@ -3,15 +3,15 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
 
 namespace setasign\Fpdi;
+
 use setasing\Fpdfd\FPDF;
 
-include dirname(__FILE__).'/../../fpdf/fpdf.php';
+include dirname(__FILE__) . '/../../fpdf/fpdf.php';
 /**
  * Class FpdfTpl
  *

@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -24,10 +23,9 @@ class PdfIndirectObject extends PdfType
      *
      * @param int $objectNumberToken
      * @param int $objectGenerationNumberToken
-     * @param PdfParser $parser
-     * @param Tokenizer $tokenizer
-     * @param StreamReader $reader
+     *
      * @return bool|self
+     *
      * @throws PdfTypeException
      */
     public static function parse(
@@ -62,7 +60,7 @@ class PdfIndirectObject extends PdfType
      *
      * @param int $objectNumber
      * @param int $generationNumber
-     * @param PdfType $value
+     *
      * @return self
      */
     public static function create($objectNumber, $generationNumber, PdfType $value)
@@ -79,7 +77,9 @@ class PdfIndirectObject extends PdfType
      * Ensures that the passed value is a PdfIndirectObject instance.
      *
      * @param mixed $indirectObject
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($indirectObject)

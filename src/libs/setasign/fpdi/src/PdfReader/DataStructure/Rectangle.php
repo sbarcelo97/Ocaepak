@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -47,8 +46,9 @@ class Rectangle
      * Create a rectangle instance by a PdfArray.
      *
      * @param PdfArray|mixed $array
-     * @param PdfParser $parser
+     *
      * @return Rectangle
+     *
      * @throws PdfTypeException
      * @throws CrossReferenceException
      * @throws PdfParserException
@@ -151,7 +151,7 @@ class Rectangle
             $this->llx,
             $this->lly,
             $this->urx,
-            $this->ury
+            $this->ury,
         ];
     }
 

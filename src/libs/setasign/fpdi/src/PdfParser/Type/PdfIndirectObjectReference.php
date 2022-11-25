@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -20,6 +19,7 @@ class PdfIndirectObjectReference extends PdfType
      *
      * @param int $objectNumber
      * @param int $generationNumber
+     *
      * @return self
      */
     public static function create($objectNumber, $generationNumber)
@@ -35,7 +35,9 @@ class PdfIndirectObjectReference extends PdfType
      * Ensures that the passed value is a PdfIndirectObject instance.
      *
      * @param mixed $value
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($value)

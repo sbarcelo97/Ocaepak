@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -19,7 +18,9 @@ class Ascii85 implements FilterInterface
      * Decode ASCII85 encoded string.
      *
      * @param string $data The input string
+     *
      * @return string
+     *
      * @throws Ascii85Exception
      */
     public function decode($data)
@@ -32,13 +33,13 @@ class Ascii85 implements FilterInterface
 
         $l = \strlen($data);
 
-        /** @noinspection ForeachInvariantsInspection */
+        /* @noinspection ForeachInvariantsInspection */
         for ($k = 0; $k < $l; ++$k) {
             $ch = \ord($data[$k]) & 0xff;
 
             //Start <~
             if ($k === 0 && $ch === 60 && isset($data[$k + 1]) && (\ord($data[$k + 1]) & 0xFF) === 126) {
-                $k++;
+                ++$k;
                 continue;
             }
             //End ~>
@@ -52,21 +53,18 @@ class Ascii85 implements FilterInterface
             }
 
             if ($ch < 33 /* ! */ || $ch > 117 /* u */) {
-                throw new Ascii85Exception(
-                    'Illegal character found while ASCII85 decode.',
-                    Ascii85Exception::ILLEGAL_CHAR_FOUND
-                );
+                throw new Ascii85Exception('Illegal character found while ASCII85 decode.', Ascii85Exception::ILLEGAL_CHAR_FOUND);
             }
 
-            $chn[$state] = $ch - 33;/* ! */
-            $state++;
+            $chn[$state] = $ch - 33; /* ! */
+            ++$state;
 
             if ($state === 5) {
                 $state = 0;
                 $r = 0;
                 for ($j = 0; $j < 5; ++$j) {
                     /** @noinspection UnnecessaryCastingInspection */
-                    $r = (int)($r * 85 + $chn[$j]);
+                    $r = (int) ($r * 85 + $chn[$j]);
                 }
 
                 $out .= \chr($r >> 24)
@@ -77,10 +75,7 @@ class Ascii85 implements FilterInterface
         }
 
         if ($state === 1) {
-            throw new Ascii85Exception(
-                'Illegal length while ASCII85 decode.',
-                Ascii85Exception::ILLEGAL_LENGTH
-            );
+            throw new Ascii85Exception('Illegal length while ASCII85 decode.', Ascii85Exception::ILLEGAL_LENGTH);
         }
 
         if ($state === 2) {

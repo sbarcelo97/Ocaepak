@@ -1,6 +1,7 @@
 <?php
 
 namespace RgOcaEpak\Classes;
+
 use ModuleCore;
 use PrestaShop\PrestaShop\Adapter\Entity\Db;
 
@@ -19,39 +20,44 @@ class OcaEpakBranches
             FROM `{TABLE}`
             WHERE postcode = '{POSTCODE}'
             AND `date` > DATE_SUB(NOW(), INTERVAL {EXPIRY} HOUR)",
-            array(
-                '{TABLE}' => _DB_PREFIX_.$module::BRANCHES_TABLE,
+            [
+                '{TABLE}' => _DB_PREFIX_ . $module::BRANCHES_TABLE,
                 '{POSTCODE}' => $postcode,
                 '{EXPIRY}' => self::$expiry,
-            )
+            ]
         );
         $result = Db::getInstance()->executeS($query);
         if (!is_array($result)) {
-            return array();
+            return [];
         }
-        $branches = array();
+        $branches = [];
         foreach ($result as $branch) {
             $branches[$branch['IdCentroImposicion']] = $branch;
         }
+
         return $branches;
     }
 
-    public static function markasvalid($idbranch){
+    public static function markasvalid($idbranch)
+    {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
-        $sql = 'UPDATE '._DB_PREFIX_.$module::BRANCHES_TABLE. ' SET entrega_paquetes = 1 where IdCentroImposicion ='.$idbranch;
+        $sql = 'UPDATE ' . _DB_PREFIX_ . $module::BRANCHES_TABLE . ' SET entrega_paquetes = 1 where IdCentroImposicion =' . $idbranch;
         Db::getInstance()->execute($sql);
     }
 
-    public static function isValid($idbranch){
+    public static function isValid($idbranch)
+    {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
-        $sql = 'SELECT 1 FROM '._DB_PREFIX_.$module::BRANCHES_TABLE. ' WHERE entrega_paquetes = 1 AND IdCentroImposicion ='.$idbranch;
+        $sql = 'SELECT 1 FROM ' . _DB_PREFIX_ . $module::BRANCHES_TABLE . ' WHERE entrega_paquetes = 1 AND IdCentroImposicion =' . $idbranch;
         $resp = Db::getInstance()->executeS($sql);
+
         return !empty($resp);
     }
 
-    public static function remove($idbranch){
+    public static function remove($idbranch)
+    {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
-        $sql = 'DELETE FROM '._DB_PREFIX_.$module::BRANCHES_TABLE. ' WHERE IdCentroImposicion ='.$idbranch;
+        $sql = 'DELETE FROM ' . _DB_PREFIX_ . $module::BRANCHES_TABLE . ' WHERE IdCentroImposicion =' . $idbranch;
         Db::getInstance()->execute($sql);
     }
 
@@ -75,8 +81,8 @@ class OcaEpakBranches
                 '{CodigoPostal}',
                 '{POSTCODE}',
                 NOW())",
-                array(
-                    '{TABLE}' => _DB_PREFIX_.$module::BRANCHES_TABLE,
+                [
+                    '{TABLE}' => _DB_PREFIX_ . $module::BRANCHES_TABLE,
                     '{POSTCODE}' => $postcode,
                     '{IdCentroImposicion}' => trim($branch['IdCentroImposicion']),
                     '{Sucursal}' => trim($branch['Sucursal']),
@@ -88,10 +94,11 @@ class OcaEpakBranches
                     '{Latitud}' => trim($branch['Latitud']),
                     '{Longitud}' => trim($branch['Longitud']),
                     '{CodigoPostal}' => trim($branch['CodigoPostal']),
-                )
+                ]
             );
             $res &= Db::getInstance()->execute($query);
         }
+
         return $res;
     }
 
@@ -99,11 +106,12 @@ class OcaEpakBranches
     {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
         $query = OcaCarrierTools::interpolateSql(
-            "DELETE FROM `{TABLE}` WHERE 1",
-            array(
-                '{TABLE}' => _DB_PREFIX_.$module::BRANCHES_TABLE,
-            )
+            'DELETE FROM `{TABLE}` WHERE 1',
+            [
+                '{TABLE}' => _DB_PREFIX_ . $module::BRANCHES_TABLE,
+            ]
         );
+
         return Db::getInstance()->execute($query);
     }
 }

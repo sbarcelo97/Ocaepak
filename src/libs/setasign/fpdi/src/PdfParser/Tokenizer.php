@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -29,8 +28,6 @@ class Tokenizer
 
     /**
      * Tokenizer constructor.
-     *
-     * @param StreamReader $streamReader
      */
     public function __construct(StreamReader $streamReader)
     {
@@ -101,6 +98,7 @@ class Tokenizer
                 return $byte;
             case '%':
                 $this->streamReader->readLine();
+
                 return $this->getNextToken();
         }
 
@@ -133,7 +131,7 @@ class Tokenizer
     /**
      * Leap white spaces.
      *
-     * @return boolean
+     * @return bool
      */
     public function leapWhiteSpaces()
     {

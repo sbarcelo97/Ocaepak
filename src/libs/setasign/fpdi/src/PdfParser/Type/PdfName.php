@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -21,8 +20,6 @@ class PdfName extends PdfType
     /**
      * Parses a name object from the passed tokenizer and stream-reader.
      *
-     * @param Tokenizer $tokenizer
-     * @param StreamReader $streamReader
      * @return self
      */
     public static function parse(Tokenizer $tokenizer, StreamReader $streamReader)
@@ -30,10 +27,12 @@ class PdfName extends PdfType
         $v = new self();
         if (\strspn($streamReader->getByte(), "\x00\x09\x0A\x0C\x0D\x20()<>[]{}/%") === 0) {
             $v->value = (string) $tokenizer->getNextToken();
+
             return $v;
         }
 
         $v->value = '';
+
         return $v;
     }
 
@@ -41,6 +40,7 @@ class PdfName extends PdfType
      * Unescapes a name string.
      *
      * @param string $value
+     *
      * @return string
      */
     public static function unescape($value)
@@ -58,6 +58,7 @@ class PdfName extends PdfType
      * Helper method to create an instance.
      *
      * @param string $string
+     *
      * @return self
      */
     public static function create($string)
@@ -72,7 +73,9 @@ class PdfName extends PdfType
      * Ensures that the passed value is a PdfName instance.
      *
      * @param mixed $name
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($name)

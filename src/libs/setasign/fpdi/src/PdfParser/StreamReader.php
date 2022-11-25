@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -20,6 +19,7 @@ class StreamReader
      *
      * @param string $content
      * @param int $maxMemory
+     *
      * @return StreamReader
      */
     public static function createByString($content, $maxMemory = 2097152)
@@ -35,11 +35,13 @@ class StreamReader
      * Creates a stream reader instance by a filename.
      *
      * @param string $filename
+     *
      * @return StreamReader
      */
     public static function createByFile($filename)
     {
         $h = \fopen($filename, 'rb');
+
         return new self($h, true);
     }
 
@@ -96,21 +98,17 @@ class StreamReader
      * StreamReader constructor.
      *
      * @param resource $stream
-     * @param bool $closeStream Defines whether to close the stream resource if the instance is destructed or not.
+     * @param bool $closeStream defines whether to close the stream resource if the instance is destructed or not
      */
     public function __construct($stream, $closeStream = false)
     {
         if (!\is_resource($stream)) {
-            throw new \InvalidArgumentException(
-                'No stream given.'
-            );
+            throw new \InvalidArgumentException('No stream given.');
         }
 
         $metaData = \stream_get_meta_data($stream);
         if (!$metaData['seekable']) {
-            throw new \InvalidArgumentException(
-                'Given stream is not seekable!'
-            );
+            throw new \InvalidArgumentException('Given stream is not seekable!');
         }
 
         $this->stream = $stream;
@@ -140,6 +138,7 @@ class StreamReader
      * Returns the byte length of the buffer.
      *
      * @param bool $atOffset
+     *
      * @return int
      */
     public function getBufferLength($atOffset = false)
@@ -165,6 +164,7 @@ class StreamReader
      * Returns the current buffer.
      *
      * @param bool $atOffset
+     *
      * @return string
      */
     public function getBuffer($atOffset = true)
@@ -186,6 +186,7 @@ class StreamReader
      * If the $position parameter is set to null the value of $this->offset will be used.
      *
      * @param int|null $position
+     *
      * @return string|bool
      */
     public function getByte($position = null)
@@ -209,6 +210,7 @@ class StreamReader
      * If the $position parameter is set to null the value of $this->offset will be used.
      *
      * @param int|null $position
+     *
      * @return string|bool
      */
     public function readByte($position = null)
@@ -234,6 +236,7 @@ class StreamReader
         }
 
         $this->offset = $offset + 1;
+
         return $this->buffer[$offset];
     }
 
@@ -246,6 +249,7 @@ class StreamReader
      *
      * @param int $length
      * @param int|null $position
+     *
      * @return string|false
      */
     public function readBytes($length, $position = null)
@@ -280,6 +284,7 @@ class StreamReader
      * Read a line from the current position.
      *
      * @param int $length
+     *
      * @return string|bool
      */
     public function readLine($length = 1024)
@@ -321,9 +326,7 @@ class StreamReader
     public function setOffset($offset)
     {
         if ($offset > $this->bufferLength || $offset < 0) {
-            throw new \OutOfRangeException(
-                \sprintf('Offset (%s) out of range (length: %s)', $offset, $this->bufferLength)
-            );
+            throw new \OutOfRangeException(\sprintf('Offset (%s) out of range (length: %s)', $offset, $this->bufferLength));
         }
 
         $this->offset = (int) $offset;
@@ -361,6 +364,7 @@ class StreamReader
                 return false;
             }
         }
+
         return true;
     }
 
@@ -431,6 +435,7 @@ class StreamReader
      *
      * @param int $pos
      * @param int $length
+     *
      * @see reset()
      */
     public function ensure($pos, $length)
@@ -450,6 +455,7 @@ class StreamReader
      * Forcefully read more data into the buffer.
      *
      * @param int $minLength
+     *
      * @return bool Returns false if the stream reaches the end
      */
     public function increaseLength($minLength = 100)

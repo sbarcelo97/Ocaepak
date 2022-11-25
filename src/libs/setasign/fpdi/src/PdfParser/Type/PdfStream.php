@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -29,10 +28,10 @@ class PdfStream extends PdfType
     /**
      * Parses a stream from a stream reader.
      *
-     * @param PdfDictionary $dictionary
-     * @param StreamReader $reader
      * @param PdfParser $parser Optional to keep backwards compatibility
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function parse(PdfDictionary $dictionary, StreamReader $reader, PdfParser $parser = null)
@@ -47,26 +46,23 @@ class PdfStream extends PdfType
         // Find the first "newline"
         while (($firstByte = $reader->getByte($offset)) !== false) {
             if ($firstByte !== "\n" && $firstByte !== "\r") {
-                $offset++;
+                ++$offset;
             } else {
                 break;
             }
         }
 
         if ($firstByte === false) {
-            throw new PdfTypeException(
-                'Unable to parse stream data. No newline after the stream keyword found.',
-                PdfTypeException::NO_NEWLINE_AFTER_STREAM_KEYWORD
-            );
+            throw new PdfTypeException('Unable to parse stream data. No newline after the stream keyword found.', PdfTypeException::NO_NEWLINE_AFTER_STREAM_KEYWORD);
         }
 
         $sndByte = $reader->getByte($offset + 1);
         if ($firstByte === "\n" || $firstByte === "\r") {
-            $offset++;
+            ++$offset;
         }
 
         if ($sndByte === "\n" && $firstByte !== "\n") {
-            $offset++;
+            ++$offset;
         }
 
         $reader->setOffset($offset);
@@ -79,8 +75,8 @@ class PdfStream extends PdfType
     /**
      * Helper method to create an instance.
      *
-     * @param PdfDictionary $dictionary
      * @param string $stream
+     *
      * @return self
      */
     public static function create(PdfDictionary $dictionary, $stream)
@@ -96,7 +92,9 @@ class PdfStream extends PdfType
      * Ensures that the passed value is a PdfStream instance.
      *
      * @param mixed $stream
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($stream)
@@ -128,8 +126,10 @@ class PdfStream extends PdfType
     /**
      * Get the stream data.
      *
-     * @param bool $cache Whether cache the stream data or not.
+     * @param bool $cache whether cache the stream data or not
+     *
      * @return bool|string
+     *
      * @throws PdfTypeException
      * @throws CrossReferenceException
      * @throws PdfParserException
@@ -175,6 +175,7 @@ class PdfStream extends PdfType
      * Extract the stream "manually".
      *
      * @return string
+     *
      * @throws PdfTypeException
      */
     protected function extractStream()
@@ -221,6 +222,7 @@ class PdfStream extends PdfType
      * Get the unfiltered stream data.
      *
      * @return string
+     *
      * @throws FilterException
      * @throws PdfParserException
      */
@@ -272,12 +274,7 @@ class PdfStream extends PdfType
                         $predictor = PdfDictionary::get($decodeParam, 'Predictor', PdfNumeric::create(1));
                         if ($predictor->value !== 1) {
                             if (!\class_exists(Predictor::class)) {
-                                throw new PdfParserException(
-                                    'This PDF document makes use of features which are only implemented in the ' .
-                                    'commercial "FPDI PDF-Parser" add-on (see https://www.setasign.com/fpdi-pdf-' .
-                                    'parser).',
-                                    PdfParserException::IMPLEMENTED_IN_FPDI_PDF_PARSER
-                                );
+                                throw new PdfParserException('This PDF document makes use of features which are only implemented in the ' . 'commercial "FPDI PDF-Parser" add-on (see https://www.setasign.com/fpdi-pdf-' . 'parser).', PdfParserException::IMPLEMENTED_IN_FPDI_PDF_PARSER);
                             }
 
                             $colors = PdfDictionary::get($decodeParam, 'Colors', PdfNumeric::create(1));
@@ -314,10 +311,7 @@ class PdfStream extends PdfType
                     break;
 
                 default:
-                    throw new FilterException(
-                        \sprintf('Unsupported filter "%s".', $filter->value),
-                        FilterException::UNSUPPORTED_FILTER
-                    );
+                    throw new FilterException(\sprintf('Unsupported filter "%s".', $filter->value), FilterException::UNSUPPORTED_FILTER);
             }
         }
 

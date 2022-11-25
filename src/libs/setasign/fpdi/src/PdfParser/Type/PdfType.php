@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -24,10 +23,10 @@ class PdfType
      *
      * This method is used to evaluate indirect and direct object references until a final value is reached.
      *
-     * @param PdfType $value
-     * @param PdfParser $parser
      * @param bool $stopAtIndirectObject
+     *
      * @return PdfType
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      */
@@ -54,16 +53,15 @@ class PdfType
      * @param string $type
      * @param PdfType $value
      * @param string $errorMessage
+     *
      * @return mixed
+     *
      * @throws PdfTypeException
      */
     protected static function ensureType($type, $value, $errorMessage)
     {
         if (!($value instanceof $type)) {
-            throw new PdfTypeException(
-                $errorMessage,
-                PdfTypeException::INVALID_DATA_TYPE
-            );
+            throw new PdfTypeException($errorMessage, PdfTypeException::INVALID_DATA_TYPE);
         }
 
         return $value;

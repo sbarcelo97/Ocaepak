@@ -53,12 +53,12 @@ trait ProcessCallbacks
     {
         $exception = $this->resolveErrorOutput();
 
-        if (! $this->errorCallbacks) {
+        if (!$this->errorCallbacks) {
             throw $exception;
         }
 
         foreach ($this->errorCallbacks as $callback) {
-            if (! $this->isAllowedThrowableType($exception, $callback)) {
+            if (!$this->isAllowedThrowableType($exception, $callback)) {
                 continue;
             }
 
@@ -83,19 +83,19 @@ trait ProcessCallbacks
 
         $parameters = $reflection->getParameters();
 
-        if (! isset($parameters[0])) {
+        if (!isset($parameters[0])) {
             return true;
         }
 
         $firstParameter = $parameters[0];
 
-        if (! $firstParameter) {
+        if (!$firstParameter) {
             return true;
         }
 
         $type = $firstParameter->getType();
 
-        if (! $type) {
+        if (!$type) {
             return true;
         }
 

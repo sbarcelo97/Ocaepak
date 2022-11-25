@@ -7,15 +7,15 @@ try {
     $serializedClosure = $argv[2] ?? null;
     $outputLength = $argv[3] ? intval($argv[3]) : (1024 * 10);
 
-    if (! $autoloader) {
+    if (!$autoloader) {
         throw new InvalidArgumentException('No autoloader provided in child process.');
     }
 
-    if (! file_exists($autoloader)) {
+    if (!file_exists($autoloader)) {
         throw new InvalidArgumentException("Could not find autoloader in child process: {$autoloader}");
     }
 
-    if (! $serializedClosure) {
+    if (!$serializedClosure) {
         throw new InvalidArgumentException('No valid closure was passed to the child process.');
     }
 
@@ -35,7 +35,7 @@ try {
 
     exit(0);
 } catch (Throwable $exception) {
-    require_once __DIR__.'/../Output/SerializableException.php';
+    require_once __DIR__ . '/../Output/SerializableException.php';
 
     $output = new \Spatie\Async\Output\SerializableException($exception);
 

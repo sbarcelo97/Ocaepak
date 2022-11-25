@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -23,9 +22,8 @@ class PdfArray extends PdfType
     /**
      * Parses an array of the passed tokenizer and parser.
      *
-     * @param Tokenizer $tokenizer
-     * @param PdfParser $parser
      * @return bool|self
+     *
      * @throws PdfTypeException
      */
     public static function parse(Tokenizer $tokenizer, PdfParser $parser)
@@ -51,6 +49,7 @@ class PdfArray extends PdfType
      * Helper method to create an instance.
      *
      * @param PdfType[] $values
+     *
      * @return self
      */
     public static function create(array $values = [])
@@ -65,8 +64,10 @@ class PdfArray extends PdfType
      * Ensures that the passed array is a PdfArray instance with a (optional) specific size.
      *
      * @param mixed $array
-     * @param null|int $size
+     * @param int|null $size
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($array, $size = null)
@@ -74,10 +75,7 @@ class PdfArray extends PdfType
         $result = PdfType::ensureType(self::class, $array, 'Array value expected.');
 
         if ($size !== null && \count($array->value) !== $size) {
-            throw new PdfTypeException(
-                \sprintf('Array with %s entries expected.', $size),
-                PdfTypeException::INVALID_DATA_SIZE
-            );
+            throw new PdfTypeException(\sprintf('Array with %s entries expected.', $size), PdfTypeException::INVALID_DATA_SIZE);
         }
 
         return $result;

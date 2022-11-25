@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -47,11 +46,13 @@ class Fpdi extends FpdfTpl
      * @param mixed $tpl The template id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
      *                           with the keys "x", "y", "width", "height", "adjustPageSize".
-     * @param float|int $y The ordinate of upper-left corner.
-     * @param float|int|null $width The width.
-     * @param float|int|null $height The height.
+     * @param float|int $y the ordinate of upper-left corner
+     * @param float|int|null $width the width
+     * @param float|int|null $height the height
      * @param bool $adjustPageSize
+     *
      * @return array The size
+     *
      * @see Fpdi::getTemplateSize()
      */
     public function useTemplate($tpl, $x = 0, $y = 0, $width = null, $height = null, $adjustPageSize = false)
@@ -61,6 +62,7 @@ class Fpdi extends FpdfTpl
             if ($this->currentTemplateId !== null) {
                 $this->templates[$this->currentTemplateId]['resources']['templates']['importedPages'][$tpl] = $tpl;
             }
+
             return $size;
         }
 
@@ -74,8 +76,9 @@ class Fpdi extends FpdfTpl
      * aspect ratio.
      *
      * @param mixed $tpl The template id
-     * @param float|int|null $width The width.
-     * @param float|int|null $height The height.
+     * @param float|int|null $width the width
+     * @param float|int|null $height the height
+     *
      * @return array|bool An array with following keys: width, height, 0 (=width), 1 (=height), orientation (L or P)
      */
     public function getTemplateSize($tpl, $width = null, $height = null)
@@ -89,7 +92,8 @@ class Fpdi extends FpdfTpl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      */
@@ -129,7 +133,7 @@ class Fpdi extends FpdfTpl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _putxobjectdict()
     {
@@ -141,7 +145,7 @@ class Fpdi extends FpdfTpl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _put($s, $newLine = true)
     {

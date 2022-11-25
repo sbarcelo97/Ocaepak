@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -19,12 +18,14 @@ class PdfBoolean extends PdfType
      * Helper method to create an instance.
      *
      * @param bool $value
+     *
      * @return self
      */
     public static function create($value)
     {
         $v = new self();
         $v->value = (bool) $value;
+
         return $v;
     }
 
@@ -32,7 +33,9 @@ class PdfBoolean extends PdfType
      * Ensures that the passed value is a PdfBoolean instance.
      *
      * @param mixed $value
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($value)

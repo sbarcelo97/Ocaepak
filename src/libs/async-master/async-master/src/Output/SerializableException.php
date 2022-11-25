@@ -26,7 +26,7 @@ class SerializableException
     {
         try {
             /** @var Throwable $throwable */
-            $throwable = new $this->class($this->message."\n\n".$this->trace);
+            $throwable = new $this->class($this->message . "\n\n" . $this->trace);
         } catch (Throwable $exception) {
             $throwable = new ParallelException($this->message, $this->class, $this->trace);
         }

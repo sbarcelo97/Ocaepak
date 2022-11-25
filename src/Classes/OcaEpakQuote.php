@@ -1,6 +1,7 @@
 <?php
 
 namespace RgOcaEpak\Classes;
+
 use ModuleCore;
 use PrestaShop\PrestaShop\Adapter\Entity\Db;
 
@@ -23,7 +24,7 @@ class OcaEpakQuote
             AND ABS(`value` - '{VALUE}') < 1
             AND `date` > DATE_SUB(NOW(), INTERVAL {EXPIRY} HOUR)",
             array(
-                '{TABLE}' => _DB_PREFIX_.$module::QUOTES_TABLE,
+                '{TABLE}' => _DB_PREFIX_ . $module::QUOTES_TABLE,
                 '{REFERENCE}' => $reference,
                 '{POSTCODE}' => $postcode,
                 '{ORIGIN}' => $origin,
@@ -33,6 +34,7 @@ class OcaEpakQuote
                 '{EXPIRY}' => self::$expiry,
             )
         );
+
         return Db::getInstance()->getValue($query);
     }
 
@@ -52,7 +54,7 @@ class OcaEpakQuote
             '{PRICE}',
             NOW())",
             array(
-                '{TABLE}' => _DB_PREFIX_.$module::QUOTES_TABLE,
+                '{TABLE}' => _DB_PREFIX_ . $module::QUOTES_TABLE,
                 '{REFERENCE}' => $reference,
                 '{POSTCODE}' => $postcode,
                 '{ORIGIN}' => $origin,
@@ -62,6 +64,7 @@ class OcaEpakQuote
                 '{PRICE}' => $price,
             )
         );
+
         return Db::getInstance()->execute($query);
     }
 
@@ -69,11 +72,12 @@ class OcaEpakQuote
     {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
         $query = OcaCarrierTools::interpolateSql(
-            "DELETE FROM `{TABLE}` WHERE 1",
+            'DELETE FROM `{TABLE}` WHERE 1',
             array(
-                '{TABLE}' => _DB_PREFIX_.$module::QUOTES_TABLE,
+                '{TABLE}' => _DB_PREFIX_ . $module::QUOTES_TABLE,
             )
         );
+
         return Db::getInstance()->execute($query);
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace RgOcaEpak\Grid\Query;
+
 use Doctrine\DBAL\Connection;
 use PrestaShop\PrestaShop\Core\Grid\Query\AbstractDoctrineQueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteriaInterface;
@@ -17,7 +19,6 @@ final class OcaOperativeQueryBuilder extends AbstractDoctrineQueryBuilder
     private $contextShopId;
 
     /**
-     * @param Connection $connection
      * @param string $dbPrefix
      * @param int $contextLangId
      * @param int $contextShopId
@@ -35,7 +36,7 @@ final class OcaOperativeQueryBuilder extends AbstractDoctrineQueryBuilder
     public function getSearchQueryBuilder(SearchCriteriaInterface $searchCriteria)
     {
         $qb = $this->getBaseQuery();
-        if($searchCriteria->getOrderBy()) {
+        if ($searchCriteria->getOrderBy()) {
             $qb->select('*')
                 ->orderBy(
                     $searchCriteria->getOrderBy(),
@@ -43,7 +44,7 @@ final class OcaOperativeQueryBuilder extends AbstractDoctrineQueryBuilder
                 )
                 ->setFirstResult($searchCriteria->getOffset())
                 ->setMaxResults($searchCriteria->getLimit());
-        }else{
+        } else {
             $qb->select('*');
         }
         foreach ($searchCriteria->getFilters() as $filterName => $filterValue) {

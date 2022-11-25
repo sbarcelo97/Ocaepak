@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -20,7 +19,6 @@ class PdfHexString extends PdfType
     /**
      * Parses a hexadecimal string object from the stream reader.
      *
-     * @param StreamReader $streamReader
      * @return bool|self
      */
     public static function parse(StreamReader $streamReader)
@@ -52,7 +50,8 @@ class PdfHexString extends PdfType
     /**
      * Helper method to create an instance.
      *
-     * @param string $string The hex encoded string.
+     * @param string $string the hex encoded string
+     *
      * @return self
      */
     public static function create($string)
@@ -67,7 +66,9 @@ class PdfHexString extends PdfType
      * Ensures that the passed value is a PdfHexString instance.
      *
      * @param mixed $hexString
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($hexString)

@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -69,8 +68,6 @@ class PdfParser
 
     /**
      * PdfParser constructor.
-     *
-     * @param StreamReader $streamReader
      */
     public function __construct(StreamReader $streamReader)
     {
@@ -112,6 +109,7 @@ class PdfParser
      * Resolves the file header.
      *
      * @throws PdfParserException
+     *
      * @return int
      */
     protected function resolveFileHeader()
@@ -127,10 +125,7 @@ class PdfParser
             $offset = \strpos($buffer, '%PDF-');
             if ($offset === false) {
                 if (!$this->streamReader->increaseLength(100) || (--$maxIterations === 0)) {
-                    throw new PdfParserException(
-                        'Unable to find PDF file header.',
-                        PdfParserException::FILE_HEADER_NOT_FOUND
-                    );
+                    throw new PdfParserException('Unable to find PDF file header.', PdfParserException::FILE_HEADER_NOT_FOUND);
                 }
                 continue;
             }
@@ -141,6 +136,7 @@ class PdfParser
         $this->streamReader->setOffset($offset);
 
         $this->fileHeader = \trim($this->streamReader->readLine());
+
         return $this->fileHeaderOffset;
     }
 
@@ -148,6 +144,7 @@ class PdfParser
      * Get the cross reference instance.
      *
      * @return CrossReference
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      */
@@ -163,7 +160,8 @@ class PdfParser
     /**
      * Get the PDF version.
      *
-     * @return int[] An array of major and minor version.
+     * @return int[] an array of major and minor version
+     *
      * @throws PdfParserException
      */
     public function getPdfVersion()
@@ -171,10 +169,7 @@ class PdfParser
         $this->resolveFileHeader();
 
         if (\preg_match('/%PDF-(\d)\.(\d)/', $this->fileHeader, $result) === 0) {
-            throw new PdfParserException(
-                'Unable to extract PDF version from file header.',
-                PdfParserException::PDF_VERSION_NOT_FOUND
-            );
+            throw new PdfParserException('Unable to extract PDF version from file header.', PdfParserException::PDF_VERSION_NOT_FOUND);
         }
         list(, $major, $minor) = $result;
 
@@ -196,6 +191,7 @@ class PdfParser
      * Get the catalog dictionary.
      *
      * @return PdfDictionary
+     *
      * @throws Type\PdfTypeException
      * @throws CrossReferenceException
      * @throws PdfParserException
@@ -214,7 +210,9 @@ class PdfParser
      *
      * @param int $objectNumber
      * @param bool $cache
+     *
      * @return PdfIndirectObject
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      */
@@ -237,9 +235,11 @@ class PdfParser
     /**
      * Read a PDF value.
      *
-     * @param null|bool|string $token
-     * @param null|string $expectedType
+     * @param bool|string|null $token
+     * @param string|null $expectedType
+     *
      * @return false|PdfArray|PdfBoolean|PdfDictionary|PdfHexString|PdfIndirectObject|PdfIndirectObjectReference|PdfName|PdfNull|PdfNumeric|PdfStream|PdfString|PdfToken
+     *
      * @throws Type\PdfTypeException
      */
     public function readValue($token = null, $expectedType = null)
@@ -252,30 +252,36 @@ class PdfParser
             if ($expectedType !== null) {
                 throw new Type\PdfTypeException('Got unexpected token type.', Type\PdfTypeException::INVALID_DATA_TYPE);
             }
+
             return false;
         }
 
         switch ($token) {
             case '(':
                 $this->ensureExpectedType($token, $expectedType);
+
                 return PdfString::parse($this->streamReader);
 
             case '<':
                 if ($this->streamReader->getByte() === '<') {
                     $this->ensureExpectedType('<<', $expectedType);
                     $this->streamReader->addOffset(1);
+
                     return PdfDictionary::parse($this->tokenizer, $this->streamReader, $this);
                 }
 
                 $this->ensureExpectedType($token, $expectedType);
+
                 return PdfHexString::parse($this->streamReader);
 
             case '/':
                 $this->ensureExpectedType($token, $expectedType);
+
                 return PdfName::parse($this->tokenizer, $this->streamReader);
 
             case '[':
                 $this->ensureExpectedType($token, $expectedType);
+
                 return PdfArray::parse($this->tokenizer, $this);
 
             default:
@@ -285,10 +291,7 @@ class PdfParser
                             switch ($token3) {
                                 case 'obj':
                                     if ($expectedType !== null && $expectedType !== PdfIndirectObject::class) {
-                                        throw new Type\PdfTypeException(
-                                            'Got unexpected token type.',
-                                            Type\PdfTypeException::INVALID_DATA_TYPE
-                                        );
+                                        throw new Type\PdfTypeException('Got unexpected token type.', Type\PdfTypeException::INVALID_DATA_TYPE);
                                     }
 
                                     return PdfIndirectObject::parse(
@@ -303,10 +306,7 @@ class PdfParser
                                         $expectedType !== null &&
                                         $expectedType !== PdfIndirectObjectReference::class
                                     ) {
-                                        throw new Type\PdfTypeException(
-                                            'Got unexpected token type.',
-                                            Type\PdfTypeException::INVALID_DATA_TYPE
-                                        );
+                                        throw new Type\PdfTypeException('Got unexpected token type.', Type\PdfTypeException::INVALID_DATA_TYPE);
                                     }
 
                                     return PdfIndirectObjectReference::create((int) $token, (int) $token2);
@@ -319,29 +319,26 @@ class PdfParser
                     }
 
                     if ($expectedType !== null && $expectedType !== PdfNumeric::class) {
-                        throw new Type\PdfTypeException(
-                            'Got unexpected token type.',
-                            Type\PdfTypeException::INVALID_DATA_TYPE
-                        );
+                        throw new Type\PdfTypeException('Got unexpected token type.', Type\PdfTypeException::INVALID_DATA_TYPE);
                     }
+
                     return PdfNumeric::create($token + 0);
                 }
 
                 if ($token === 'true' || $token === 'false') {
                     $this->ensureExpectedType($token, $expectedType);
+
                     return PdfBoolean::create($token === 'true');
                 }
 
                 if ($token === 'null') {
                     $this->ensureExpectedType($token, $expectedType);
+
                     return new PdfNull();
                 }
 
                 if ($expectedType !== null && $expectedType !== PdfToken::class) {
-                    throw new Type\PdfTypeException(
-                        'Got unexpected token type.',
-                        Type\PdfTypeException::INVALID_DATA_TYPE
-                    );
+                    throw new Type\PdfTypeException('Got unexpected token type.', Type\PdfTypeException::INVALID_DATA_TYPE);
                 }
 
                 $v = new PdfToken();
@@ -356,7 +353,9 @@ class PdfParser
      *
      * @param string $token
      * @param string|null $expectedType
+     *
      * @return bool
+     *
      * @throws Type\PdfTypeException
      */
     private function ensureExpectedType($token, $expectedType)
@@ -369,7 +368,7 @@ class PdfParser
             '[' => PdfArray::class,
             'true' => PdfBoolean::class,
             'false' => PdfBoolean::class,
-            'null' => PdfNull::class
+            'null' => PdfNull::class,
         ];
 
         if ($expectedType === null || $mapping[$token] === $expectedType) {

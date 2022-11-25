@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -21,6 +20,7 @@ abstract class PageBoundaries
      * The media box defines the boundaries of the physical medium on which the page is to be printed.
      *
      * @see PDF 32000-1:2008 - 14.11.2 Page Boundaries
+     *
      * @var string
      */
     const MEDIA_BOX = 'MediaBox';
@@ -32,6 +32,7 @@ abstract class PageBoundaries
      * printed.
      *
      * @see PDF 32000-1:2008 - 14.11.2 Page Boundaries
+     *
      * @var string
      */
     const CROP_BOX = 'CropBox';
@@ -43,6 +44,7 @@ abstract class PageBoundaries
      * production environment.
      *
      * @see PDF 32000-1:2008 - 14.11.2 Page Boundaries
+     *
      * @var string
      */
     const BLEED_BOX = 'BleedBox';
@@ -53,6 +55,7 @@ abstract class PageBoundaries
      * The trim box defines the intended dimensions of the finished page after trimming.
      *
      * @see PDF 32000-1:2008 - 14.11.2 Page Boundaries
+     *
      * @var string
      */
     const TRIM_BOX = 'TrimBox';
@@ -64,6 +67,7 @@ abstract class PageBoundaries
      * by the page’s creator.
      *
      * @see PDF 32000-1:2008 - 14.11.2 Page Boundaries
+     *
      * @var string
      */
     const ART_BOX = 'ArtBox';
@@ -78,14 +82,15 @@ abstract class PageBoundaries
         self::CROP_BOX,
         self::BLEED_BOX,
         self::TRIM_BOX,
-        self::ART_BOX
+        self::ART_BOX,
     );
 
     /**
      * Checks if a name is a valid page boundary name.
      *
      * @param string $name The boundary name
-     * @return boolean A boolean value whether the name is valid or not.
+     *
+     * @return bool a boolean value whether the name is valid or not
      */
     public static function isValidName($name)
     {

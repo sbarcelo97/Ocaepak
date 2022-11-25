@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -19,6 +18,7 @@ class AsciiHex implements FilterInterface
      * Converts an ASCII hexadecimal encoded string into its binary representation.
      *
      * @param string $data The input string
+     *
      * @return string
      */
     public function decode($data)
@@ -35,12 +35,14 @@ class AsciiHex implements FilterInterface
      * Converts a string into ASCII hexadecimal representation.
      *
      * @param string $data The input string
-     * @param boolean $leaveEOD
+     * @param bool $leaveEOD
+     *
      * @return string
      */
     public function encode($data, $leaveEOD = false)
     {
         $t = \unpack('H*', $data);
+
         return \current($t)
             . ($leaveEOD ? '' : '>');
     }

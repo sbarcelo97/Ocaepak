@@ -1,6 +1,7 @@
 <?php
 
 namespace RgOcaEpak\Classes;
+
 use ModuleCore;
 use PrestaShop\PrestaShop\Adapter\Entity\Address;
 use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
@@ -46,12 +47,12 @@ class OcaEpakOrder extends ObjectModel
         'primary' => 'id_ocae_orders',
         'multishop' => false,
         'fields' => array(
-            'id_order' =>	array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
-            'reference' =>	array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => TRUE),
+            'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
+            'reference' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
             'operation_code' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
-            'tracking' => array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => FALSE),
+            'tracking' => array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false),
             //'id_shop' => array('type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true),
-        )
+        ),
     );
 
     /**
@@ -62,7 +63,7 @@ class OcaEpakOrder extends ObjectModel
     {
         if (!in_array(
                 $field,
-                array('id_order', 'reference', 'tracking', 'operation_code', /*'status'*/)
+                array('id_order', 'reference', 'tracking', 'operation_code'/*'status'*/)
         )) {
             return false;
         }
@@ -72,42 +73,42 @@ class OcaEpakOrder extends ObjectModel
             WHERE `{FIELD}` = '{IDFIELD}'
             ORDER BY `{FIELD}` DESC",
             array(
-                '{TABLE}' => _DB_PREFIX_.'ocae_orders',
+                '{TABLE}' => _DB_PREFIX_ . 'ocae_orders',
                 '{ID}' => 'id_ocae_orders',
                 '{FIELD}' => $field,
                 '{IDFIELD}' => $id_field,
             )
         );
         $id = Db::getInstance()->getValue($query);
+
         return $id ? new OcaEpakOrder($id) : false;
     }
 
-
     public static function generateOrderXml($data)
     {
-        $costCenter = isset($data['cost_center_id']) ? (string)$data['cost_center_id'] : '0';
-        $idci = isset($data['imposition_center_id']) ? (string)$data['imposition_center_id'] : '0';
+        $costCenter = isset($data['cost_center_id']) ? (string) $data['cost_center_id'] : '0';
+        $idci = isset($data['imposition_center_id']) ? (string) $data['imposition_center_id'] : '0';
         $config = array();
         $fields = array(
-            'account', 'street', 'number', 'floor', 'apartment', 'postcode', 'locality', 'province', 'contact', 'email', 'requestor', 'observations'
+            'account', 'street', 'number', 'floor', 'apartment', 'postcode', 'locality', 'province', 'contact', 'email', 'requestor', 'observations',
         );
         $admissionFields = array(
-            'account', 'postcode'
+            'account', 'postcode',
         );
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
         foreach ($fields as $conf) {
-            $config[$conf] = (Configuration::get($module::CONFIG_PREFIX.'PICKUPS_ENABLED') || in_array($conf, $admissionFields)) ? self::cleanOcaAttribute(Configuration::get($module::CONFIG_PREFIX.Tools::strtoupper($conf)), constant('self::OCA_'.Tools::strtoupper($conf).'_LENGTH')) : '';
+            $config[$conf] = (Configuration::get($module::CONFIG_PREFIX . 'PICKUPS_ENABLED') || in_array($conf, $admissionFields)) ? self::cleanOcaAttribute(Configuration::get($module::CONFIG_PREFIX . Tools::strtoupper($conf)), constant('self::OCA_' . Tools::strtoupper($conf) . '_LENGTH')) : '';
         }
         $config['timeslot'] = (
             in_array($data['operative']->type, array('PaP', 'PaS'))
-            ? Configuration::get($module::CONFIG_PREFIX.'TIMESLOT')
+            ? Configuration::get($module::CONFIG_PREFIX . 'TIMESLOT')
             : '1'
         );
         $address = array();
         foreach (
             array('street', 'number', 'floor', 'apartment', 'locality', 'province', 'observations') as $conf
         ) {
-            $address[$conf] = self::cleanOcaAttribute($data[$conf], constant('self::OCA_'.Tools::strtoupper($conf).'_LENGTH'));
+            $address[$conf] = self::cleanOcaAttribute($data[$conf], constant('self::OCA_' . Tools::strtoupper($conf) . '_LENGTH'));
         }
         $address['firstname'] = self::cleanOcaAttribute($data['customer']->firstname, self::OCA_NAME_LENGTH);
         $address['lastname'] = self::cleanOcaAttribute($data['customer']->lastname, self::OCA_NAME_LENGTH);
@@ -116,34 +117,32 @@ class OcaEpakOrder extends ObjectModel
         $address['mobile'] = self::cleanOcaAttribute($data['address']->phone_mobile, self::OCA_MOBILE_LENGTH);
         $reference = self::cleanOcaAttribute((Tools::strlen(trim($data['address']->dni)) ? $data['address']->dni : $data['order']->reference), self::OCA_REMIT_LENGTH);
 
-        ob_start();
-        ?>
+        ob_start(); ?>
         <ROWS>
-            <cabecera ver="2.0" nrocuenta="<?php  echo $config['account'];  ?>"/>
+            <cabecera ver="2.0" nrocuenta="<?php echo $config['account']; ?>"/>
             <origenes>
-                <origen calle="<?php  echo $config['street'];  ?>" nro="<?php  echo $config['number'];  ?>" piso="<?php  echo $config['floor'];  ?>" depto="<?php  echo $config['apartment'];  ?>" cp="<?php  echo $config['postcode'];  ?>" localidad="<?php  echo $config['locality'];  ?>" provincia="<?php  echo $config['province'];  ?>" contacto="<?php  echo $config['contact'];  ?>" email="<?php  echo $config['email'];  ?>" solicitante="<?php  echo $config['requestor'];  ?>" observaciones="<?php  echo $config['observations'];  ?>" centrocosto="<?php  echo $costCenter;  ?>" idfranjahoraria="<?php  echo $config['timeslot'];  ?>" <?php  if ($data['origin_imposition_center_id']):  ?>idcentroimposicionorigen="<?php  echo $data['origin_imposition_center_id'];  ?>" <?php  endif;  ?>fecha="<?php  echo $data['date'];  ?>">
+                <origen calle="<?php echo $config['street']; ?>" nro="<?php echo $config['number']; ?>" piso="<?php echo $config['floor']; ?>" depto="<?php echo $config['apartment']; ?>" cp="<?php echo $config['postcode']; ?>" localidad="<?php echo $config['locality']; ?>" provincia="<?php echo $config['province']; ?>" contacto="<?php echo $config['contact']; ?>" email="<?php echo $config['email']; ?>" solicitante="<?php echo $config['requestor']; ?>" observaciones="<?php echo $config['observations']; ?>" centrocosto="<?php echo $costCenter; ?>" idfranjahoraria="<?php echo $config['timeslot']; ?>" <?php if ($data['origin_imposition_center_id']) {  ?>idcentroimposicionorigen="<?php echo $data['origin_imposition_center_id']; ?>" <?php } ?>fecha="<?php echo $data['date']; ?>">
                     <envios>
-                        <envio idoperativa="<?php  echo self::cleanOcaAttribute($data['operative']->reference, self::OCA_OPERATIVE_LENGTH);  ?>" nroremito="<?php  echo $reference;  ?>">
-                            <destinatario apellido="<?php  echo $address['lastname'];  ?>" nombre="<?php  echo $address['firstname'];  ?>" calle="<?php  echo $address['street'];  ?>" nro="<?php  echo $address['number'];  ?>" piso="<?php  echo $address['floor'];  ?>" depto="<?php  echo $address['apartment'];  ?>" localidad="<?php  echo $address['locality'];  ?>" provincia="<?php  echo $address['province'];  ?>" cp="<?php  echo $data['postcode'];  ?>" telefono="<?php  echo $address['phone'];  ?>" email="<?php  echo $address['email'];  ?>" idci="<?php  echo $idci;  ?>" celular="<?php  echo $address['mobile'];  ?>" observaciones="<?php  echo $address['observations'];  ?>"/>
-                            <paquetes><?php  foreach ($data['boxes'] as $box) :  ?>
-                                <paquete alto="<?php  echo self::cleanOcaAttribute($box['h'], self::OCA_ATTR_LENGTH);  ?>" ancho="<?php  echo self::cleanOcaAttribute($box['d'], self::OCA_ATTR_LENGTH);  ?>" largo="<?php  echo self::cleanOcaAttribute($box['l'], self::OCA_ATTR_LENGTH);  ?>" peso="<?php  echo self::cleanOcaAttribute($box['w'], self::OCA_ATTR_LENGTH);  ?>" valor="<?php  echo self::cleanOcaAttribute($box['v'], self::OCA_ATTR_LENGTH);  ?>" cant="<?php  echo self::cleanOcaAttribute($box['q'], self::OCA_ATTR_LENGTH);  ?>" />
-                            <?php  endforeach;  ?></paquetes>
+                        <envio idoperativa="<?php echo self::cleanOcaAttribute($data['operative']->reference, self::OCA_OPERATIVE_LENGTH); ?>" nroremito="<?php echo $reference; ?>">
+                            <destinatario apellido="<?php echo $address['lastname']; ?>" nombre="<?php echo $address['firstname']; ?>" calle="<?php echo $address['street']; ?>" nro="<?php echo $address['number']; ?>" piso="<?php echo $address['floor']; ?>" depto="<?php echo $address['apartment']; ?>" localidad="<?php echo $address['locality']; ?>" provincia="<?php echo $address['province']; ?>" cp="<?php echo $data['postcode']; ?>" telefono="<?php echo $address['phone']; ?>" email="<?php echo $address['email']; ?>" idci="<?php echo $idci; ?>" celular="<?php echo $address['mobile']; ?>" observaciones="<?php echo $address['observations']; ?>"/>
+                            <paquetes><?php foreach ($data['boxes'] as $box) {  ?>
+                                <paquete alto="<?php echo self::cleanOcaAttribute($box['h'], self::OCA_ATTR_LENGTH); ?>" ancho="<?php echo self::cleanOcaAttribute($box['d'], self::OCA_ATTR_LENGTH); ?>" largo="<?php echo self::cleanOcaAttribute($box['l'], self::OCA_ATTR_LENGTH); ?>" peso="<?php echo self::cleanOcaAttribute($box['w'], self::OCA_ATTR_LENGTH); ?>" valor="<?php echo self::cleanOcaAttribute($box['v'], self::OCA_ATTR_LENGTH); ?>" cant="<?php echo self::cleanOcaAttribute($box['q'], self::OCA_ATTR_LENGTH); ?>" />
+                            <?php } ?></paquetes>
                         </envio>
                     </envios>
                 </origen>
             </origenes>
         </ROWS>
         <?php
-        return '<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>'.ob_get_clean();
+        return '<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>' . ob_get_clean();
     }
-
 
     public static function cleanOcaAttribute($text, $maxLength, $fromEnd = false)
     {
-        $clean = trim(htmlspecialchars(iconv('utf-8','ascii//TRANSLIT', str_replace('"', '', $text))));
+        $clean = trim(htmlspecialchars(iconv('utf-8', 'ascii//TRANSLIT', str_replace('"', '', $text))));
         if (strpos($clean, '?') !== false) {
             @setlocale(LC_TIME, 'es_ES');
-            $clean = trim(htmlspecialchars(iconv('utf-8','ascii//TRANSLIT', str_replace('"', '', $text))));
+            $clean = trim(htmlspecialchars(iconv('utf-8', 'ascii//TRANSLIT', str_replace('"', '', $text))));
         }
 
         if ($fromEnd) {
@@ -157,19 +156,20 @@ class OcaEpakOrder extends ObjectModel
      * @param $address Address
      *
      * @return array
+     *
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
     public static function parseOcaAddress($address)
     {
-        $remainingAddress =  trim(str_replace(array("\n", "\r"), ' ', trim($address->address1.' '.$address->address2)), "\t\n\r");
-        $shortAddress = trim($address->address1).' '.trim($address->city);
-        $mediumAddress = trim($address->address1).', '.(Tools::strlen(trim($address->address1)) ? trim($address->address1).', ' : '').trim($address->city);
+        $remainingAddress = trim(str_replace(array("\n", "\r"), ' ', trim($address->address1 . ' ' . $address->address2)), "\t\n\r");
+        $shortAddress = trim($address->address1) . ' ' . trim($address->city);
+        $mediumAddress = trim($address->address1) . ', ' . (Tools::strlen(trim($address->address1)) ? trim($address->address1) . ', ' : '') . trim($address->city);
         $ocaAddress = array(
             'floor' => '',
             'apartment' => '',
             'other' => $address->other,
-            'geocoded' => false
+            'geocoded' => false,
         );
 
         $remainingAddress = str_replace(array('Nº', 'Nª', 'N°', 'nº', 'nª', 'n°'), '', $remainingAddress);
@@ -183,7 +183,7 @@ class OcaEpakOrder extends ObjectModel
                 'tercero' => 3,
                 'cuarto' => 4,
                 'quinto' => 5,
-                'sexto' => 6
+                'sexto' => 6,
             );
             if (!Tools::strlen($matches[2])) {
                 $ocaAddress['floor'] = $floors[$matches[1]];
@@ -244,7 +244,7 @@ class OcaEpakOrder extends ObjectModel
                     'floor' => $ocaAddress['floor'],
                     'apartment' => $ocaAddress['apartment'],
                     'other' => $ocaAddress['other'],
-                    'geocoded' => true
+                    'geocoded' => true,
                 );
             }
         } else {
@@ -299,7 +299,7 @@ class OcaEpakOrder extends ObjectModel
             || Tools::strlen(trim($ocaAddress['remainder']))
         ) {
             $ocaAddress['discrepancy'] = true;
-            $ocaAddress['other'] = (Tools::strlen(trim($ocaAddress['remainder'])) ? trim($ocaAddress['remainder']).' ' : '').$ocaAddress['other'];
+            $ocaAddress['other'] = (Tools::strlen(trim($ocaAddress['remainder'])) ? trim($ocaAddress['remainder']) . ' ' : '') . $ocaAddress['other'];
         } else {
             $ocaAddress['discrepancy'] = false;
         }
@@ -312,16 +312,16 @@ class OcaEpakOrder extends ObjectModel
     public static function geocodeAddress($address, $fullPostcode = '')
     {
         $module = ModuleCore::getInstanceByName('rg_ocaepak');
-        $postcodeParams = $fullPostcode ? ('|postal_code:'.$fullPostcode) : '';
-        $url = parse_url('http://maps.googleapis.com/maps/api/geocode/json?region=ar&key='.Configuration::get($module::CONFIG_PREFIX.'GMAPS_API_KEY').'&language=es&address=' . urlencode($address) . '&components=country:AR'.$postcodeParams);
+        $postcodeParams = $fullPostcode ? ('|postal_code:' . $fullPostcode) : '';
+        $url = parse_url('http://maps.googleapis.com/maps/api/geocode/json?region=ar&key=' . Configuration::get($module::CONFIG_PREFIX . 'GMAPS_API_KEY') . '&language=es&address=' . urlencode($address) . '&components=country:AR' . $postcodeParams);
         $query = isset($url['query']) ? "?{$url['query']}" : '';
-        if ($fp = fsockopen('tls://'.$url['host'], 443)) {
+        if ($fp = fsockopen('tls://' . $url['host'], 443)) {
             fwrite($fp, "GET {$url['path']}{$query} HTTP/1.0\r\n");
             fwrite($fp, "Host: {$url['host']}\r\n");
             fwrite($fp, "Accept: application/json\r\n");
             fwrite($fp, "Connection: close\r\n\r\n");
             $result = '';
-            while(!feof($fp)) {
+            while (!feof($fp)) {
                 $result .= fgets($fp);
             }
             fclose($fp);
@@ -335,7 +335,6 @@ class OcaEpakOrder extends ObjectModel
             return false;
         }
     }
-
 
     public static function stringDistance($str1, $str2)
     {

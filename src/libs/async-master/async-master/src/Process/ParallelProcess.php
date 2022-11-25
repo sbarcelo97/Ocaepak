@@ -65,12 +65,12 @@ class ParallelProcess implements Runnable
 
     public function getOutput()
     {
-        if (! $this->output) {
+        if (!$this->output) {
             $processOutput = $this->process->getOutput();
 
             $this->output = @unserialize(base64_decode($processOutput));
 
-            if (! $this->output) {
+            if (!$this->output) {
                 $this->errorOutput = $processOutput;
             }
         }
@@ -80,12 +80,12 @@ class ParallelProcess implements Runnable
 
     public function getErrorOutput()
     {
-        if (! $this->errorOutput) {
+        if (!$this->errorOutput) {
             $processOutput = $this->process->getErrorOutput();
 
             $this->errorOutput = @unserialize(base64_decode($processOutput));
 
-            if (! $this->errorOutput) {
+            if (!$this->errorOutput) {
                 $this->errorOutput = $processOutput;
             }
         }
@@ -121,7 +121,7 @@ class ParallelProcess implements Runnable
             $exception = $exception->asThrowable();
         }
 
-        if (! $exception instanceof Throwable) {
+        if (!$exception instanceof Throwable) {
             $exception = ParallelError::fromException($exception);
         }
 

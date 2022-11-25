@@ -1,4 +1,5 @@
 <?php
+
 namespace RgOcaEpak\Grid;
 
 use PrestaShop\PrestaShop\Core\Grid\Action\GridActionCollection;
@@ -7,12 +8,11 @@ use PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\LinkRowAction;
 use PrestaShop\PrestaShop\Core\Grid\Action\Type\LinkGridAction;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ActionColumn;
-use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
+use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
 
 class OcaGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
-
     protected function getId()
     {
         // TODO: Implement getId() method.
@@ -22,7 +22,7 @@ class OcaGridDefinitionFactory extends AbstractGridDefinitionFactory
     protected function getName()
     {
         // TODO: Implement getName() method.
-        return $this->trans('Operativas Oca',[],'Modules.Rgocaepak.Form');
+        return $this->trans('Operativas Oca', [], 'Modules.Rgocaepak.Form');
     }
 
     protected function getColumns()
@@ -66,7 +66,6 @@ class OcaGridDefinitionFactory extends AbstractGridDefinitionFactory
                     ])
             );
     }
-
 
     private function getRowActions()
     {

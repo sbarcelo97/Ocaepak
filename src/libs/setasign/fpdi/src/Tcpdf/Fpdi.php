@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -83,11 +82,13 @@ class Fpdi extends \TCPDF
      * @param mixed $tpl The template id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
      *                           with the keys "x", "y", "width", "height", "adjustPageSize".
-     * @param float|int $y The ordinate of upper-left corner.
-     * @param float|int|null $width The width.
-     * @param float|int|null $height The height.
+     * @param float|int $y the ordinate of upper-left corner
+     * @param float|int|null $width the width
+     * @param float|int|null $height the height
      * @param bool $adjustPageSize
+     *
      * @return array The size
+     *
      * @see FpdiTrait::getTemplateSize()
      */
     public function useTemplate($tpl, $x = 0, $y = 0, $width = null, $height = null, $adjustPageSize = false)
@@ -104,11 +105,13 @@ class Fpdi extends \TCPDF
      * @param mixed $pageId The page id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
      *                           with the keys "x", "y", "width", "height", "adjustPageSize".
-     * @param float|int $y The ordinate of upper-left corner.
-     * @param float|int|null $width The width.
-     * @param float|int|null $height The height.
+     * @param float|int $y the ordinate of upper-left corner
+     * @param float|int|null $width the width
+     * @param float|int|null $height the height
      * @param bool $adjustPageSize
-     * @return array The size.
+     *
+     * @return array the size
+     *
      * @see Fpdi::getTemplateSize()
      */
     public function useImportedPage($pageId, $x = 0, $y = 0, $width = null, $height = null, $adjustPageSize = false)
@@ -129,8 +132,9 @@ class Fpdi extends \TCPDF
      * aspect ratio.
      *
      * @param mixed $tpl The template id
-     * @param float|int|null $width The width.
-     * @param float|int|null $height The height.
+     * @param float|int|null $width the width
+     * @param float|int|null $height the height
+     *
      * @return array|bool An array with following keys: width, height, 0 (=width), 1 (=height), orientation (L or P)
      */
     public function getTemplateSize($tpl, $width = null, $height = null)
@@ -139,7 +143,7 @@ class Fpdi extends \TCPDF
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _getxobjectdict()
     {
@@ -153,7 +157,8 @@ class Fpdi extends \TCPDF
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @throws CrossReferenceException
      * @throws PdfParserException
      */
@@ -198,7 +203,6 @@ class Fpdi extends \TCPDF
             }
         }
 
-
         parent::_putxobjects();
         $this->currentObjectNumber = null;
     }
@@ -221,25 +225,27 @@ class Fpdi extends \TCPDF
     /**
      * Begin a new object and return the object number.
      *
-     * @param int|string $objid Object ID (leave empty to get a new ID).
+     * @param int|string $objid object ID (leave empty to get a new ID)
+     *
      * @return int object number
      */
     protected function _newobj($objid = '')
     {
         $this->_out($this->_getobj($objid));
+
         return $this->n;
     }
 
     /**
      * Writes a PdfType object to the resulting buffer.
      *
-     * @param PdfType $value
      * @throws PdfTypeException
      */
     protected function writePdfType(PdfType $value)
     {
         if (!$this->encrypted) {
             $this->fpdiWritePdfType($value);
+
             return;
         }
 
@@ -259,7 +265,7 @@ class Fpdi extends \TCPDF
             $dictionary->value['Length'] = PdfNumeric::create(\strlen($stream));
             $value = PdfStream::create($dictionary, $stream);
         } elseif ($value instanceof PdfIndirectObject) {
-            /**
+            /*
              * @var PdfIndirectObject $value
              */
             $this->currentObjectNumber = $this->objectMap[$this->currentReaderId][$value->objectNumber];

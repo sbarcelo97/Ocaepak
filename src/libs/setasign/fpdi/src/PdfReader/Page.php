@@ -3,13 +3,13 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
 
 namespace setasign\Fpdi\PdfReader;
 
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -22,7 +22,6 @@ use setasign\Fpdi\PdfParser\Type\PdfStream;
 use setasign\Fpdi\PdfParser\Type\PdfType;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\DataStructure\Rectangle;
-use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 
 /**
  * Class representing a page of a PDF document
@@ -47,15 +46,12 @@ class Page
     /**
      * Inherited attributes
      *
-     * @var null|array
+     * @var array|null
      */
     protected $inheritedAttributes;
 
     /**
      * Page constructor.
-     *
-     * @param PdfIndirectObject $page
-     * @param PdfParser $parser
      */
     public function __construct(PdfIndirectObject $page, PdfParser $parser)
     {
@@ -77,6 +73,7 @@ class Page
      * Get the dictionary of this page.
      *
      * @return PdfDictionary
+     *
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws CrossReferenceException
@@ -95,7 +92,9 @@ class Page
      *
      * @param string $name
      * @param bool $inherited
+     *
      * @return PdfType|null
+     *
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws CrossReferenceException
@@ -126,7 +125,7 @@ class Page
                             }
                         }
 
-                        /** @noinspection NotOptimalIfConditionsInspection */
+                        /* @noinspection NotOptimalIfConditionsInspection */
                         if (isset($parentDict->value['Parent']) && \count($inheritedKeys) > 0) {
                             $parentDict = PdfType::resolve(PdfDictionary::get($parentDict, 'Parent'), $this->parser);
                         } else {
@@ -148,6 +147,7 @@ class Page
      * Get the rotation value.
      *
      * @return int
+     *
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws CrossReferenceException
@@ -173,10 +173,13 @@ class Page
      *
      * @param string $box
      * @param bool $fallback
+     *
      * @return bool|Rectangle
+     *
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws CrossReferenceException
+     *
      * @see PageBoundaries
      */
     public function getBoundary($box = PageBoundaries::CROP_BOX, $fallback = true)
@@ -208,7 +211,9 @@ class Page
      *
      * @param string $box
      * @param bool $fallback
+     *
      * @return array|bool
+     *
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws CrossReferenceException
@@ -225,7 +230,7 @@ class Page
 
         return [
             $interchange ? $boundary->getHeight() : $boundary->getWidth(),
-            $interchange ? $boundary->getWidth() : $boundary->getHeight()
+            $interchange ? $boundary->getWidth() : $boundary->getHeight(),
         ];
     }
 
@@ -233,6 +238,7 @@ class Page
      * Get the raw content stream.
      *
      * @return string
+     *
      * @throws PdfReaderException
      * @throws PdfTypeException
      * @throws FilterException
@@ -263,9 +269,6 @@ class Page
             return $contents->getUnfilteredStream();
         }
 
-        throw new PdfReaderException(
-            'Array or stream expected.',
-            PdfReaderException::UNEXPECTED_DATA_TYPE
-        );
+        throw new PdfReaderException('Array or stream expected.', PdfReaderException::UNEXPECTED_DATA_TYPE);
     }
 }

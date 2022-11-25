@@ -27,12 +27,12 @@ class ParentRuntime
 
     public static function init(string $autoloader = null)
     {
-        if (! $autoloader) {
+        if (!$autoloader) {
             $existingAutoloaderFiles = array_filter([
-                __DIR__.'/../../../../autoload.php',
-                __DIR__.'/../../../autoload.php',
-                __DIR__.'/../../vendor/autoload.php',
-                __DIR__.'/../../../vendor/autoload.php',
+                __DIR__ . '/../../../../autoload.php',
+                __DIR__ . '/../../../autoload.php',
+                __DIR__ . '/../../vendor/autoload.php',
+                __DIR__ . '/../../../vendor/autoload.php',
             ], function (string $path) {
                 return file_exists($path);
             });
@@ -41,24 +41,21 @@ class ParentRuntime
         }
 
         self::$autoloader = $autoloader;
-        self::$childProcessScript = __DIR__.'/ChildRuntime.php';
+        self::$childProcessScript = __DIR__ . '/ChildRuntime.php';
 
         self::$isInitialised = true;
     }
 
     /**
      * @param \Spatie\Async\Task|callable $task
-     * @param int|null $outputLength
-     *
-     * @return \Spatie\Async\Process\Runnable
      */
     public static function createProcess($task, ?int $outputLength = null, ?string $binary = 'php'): Runnable
     {
-        if (! self::$isInitialised) {
+        if (!self::$isInitialised) {
             self::init();
         }
 
-        if (! Pool::isSupported()) {
+        if (!Pool::isSupported()) {
             return SynchronousProcess::create($task, self::getId());
         }
 
@@ -75,8 +72,6 @@ class ParentRuntime
 
     /**
      * @param \Spatie\Async\Task|callable $task
-     *
-     * @return string
      */
     public static function encodeTask($task): string
     {
@@ -98,8 +93,8 @@ class ParentRuntime
             self::$myPid = getmypid();
         }
 
-        self::$currentId += 1;
+        ++self::$currentId;
 
-        return (string) self::$currentId.(string) self::$myPid;
+        return (string) self::$currentId . (string) self::$myPid;
     }
 }

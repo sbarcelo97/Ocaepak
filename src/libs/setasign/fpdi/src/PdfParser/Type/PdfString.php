@@ -3,7 +3,6 @@
 /**
  * This file is part of FPDI
  *
- * @package   setasign\Fpdi
  * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
@@ -20,7 +19,6 @@ class PdfString extends PdfType
     /**
      * Parses a string object from the stream reader.
      *
-     * @param StreamReader $streamReader
      * @return self
      */
     public static function parse(StreamReader $streamReader)
@@ -29,7 +27,7 @@ class PdfString extends PdfType
         $openBrackets = 1;
         do {
             $buffer = $streamReader->getBuffer(false);
-            for ($length = \strlen($buffer); $openBrackets !== 0 && $pos < $length; $pos++) {
+            for ($length = \strlen($buffer); $openBrackets !== 0 && $pos < $length; ++$pos) {
                 switch ($buffer[$pos]) {
                     case '(':
                         $openBrackets++;
@@ -55,7 +53,8 @@ class PdfString extends PdfType
     /**
      * Helper method to create an instance.
      *
-     * @param string $value The string needs to be escaped accordingly.
+     * @param string $value the string needs to be escaped accordingly
+     *
      * @return self
      */
     public static function create($value)
@@ -70,7 +69,9 @@ class PdfString extends PdfType
      * Ensures that the passed value is a PdfString instance.
      *
      * @param mixed $string
+     *
      * @return self
+     *
      * @throws PdfTypeException
      */
     public static function ensure($string)
@@ -82,13 +83,14 @@ class PdfString extends PdfType
      * Unescapes escaped sequences in a PDF string according to the PDF specification.
      *
      * @param string $s
+     *
      * @return string
      */
     public static function unescape($s)
     {
         $out = '';
-        /** @noinspection ForeachInvariantsInspection */
-        for ($count = 0, $n = \strlen($s); $count < $n; $count++) {
+        /* @noinspection ForeachInvariantsInspection */
+        for ($count = 0, $n = \strlen($s); $count < $n; ++$count) {
             if ($s[$count] !== '\\') {
                 $out .= $s[$count];
             } else {
@@ -126,7 +128,7 @@ class PdfString extends PdfType
 
                     case "\r":
                         if ($count !== $n - 1 && $s[$count + 1] === "\n") {
-                            $count++;
+                            ++$count;
                         }
                         break;
 
@@ -140,16 +142,16 @@ class PdfString extends PdfType
                         if ($actualChar >= 48 && $actualChar <= 57) {
                             $oct = '' . $s[$count];
 
-                            /** @noinspection NotOptimalIfConditionsInspection */
+                            /* @noinspection NotOptimalIfConditionsInspection */
                             if (
                                 $count + 1 < $n
                                 && \ord($s[$count + 1]) >= 48
                                 && \ord($s[$count + 1]) <= 57
                             ) {
-                                $count++;
+                                ++$count;
                                 $oct .= $s[$count];
 
-                                /** @noinspection NotOptimalIfConditionsInspection */
+                                /* @noinspection NotOptimalIfConditionsInspection */
                                 if (
                                     $count + 1 < $n
                                     && \ord($s[$count + 1]) >= 48
@@ -167,6 +169,7 @@ class PdfString extends PdfType
                 }
             }
         }
+
         return $out;
     }
 }

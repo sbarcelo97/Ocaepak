@@ -7,8 +7,8 @@ use PrestaShop\PrestaShop\Adapter\Entity\Db;
 
 class OcaEpakQuote
 {
-    public static $expiry = 8; //hours
-    public static $volumePrecision = 6; //decimal places
+    public static $expiry = 8; // hours
+    public static $volumePrecision = 6; // decimal places
 
     public static function retrieve($reference, $postcode, $origin, $volume, $weight, $value)
     {

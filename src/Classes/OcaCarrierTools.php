@@ -60,16 +60,13 @@ class OcaCarrierTools
         switch ($configuration->get('PS_DIMENSION_UNIT')) {
             case 'm':
                 $divider = 1;
-                //$padding = $defPadding/100;
                 break;
             case 'in':
-                $divider = 39.37 * 39.37 * 39.37;  //39.37 in to 1 m
-                //$padding = $defPadding*0.3937;
+                $divider = 39.37 * 39.37 * 39.37;  // 39.37 in to 1 m
                 break;
             case 'cm':
             default:
                 $divider = 1000000;
-                //$padding = $defPadding;
                 break;
         }
         $padding = $defPadding / 100;
@@ -100,14 +97,10 @@ class OcaCarrierTools
                 continue;
             }
             $weight += ($product['weight'] > 0 ? ($product['weight'] * $multiplier) : $defWeight) * $product['cart_quantity'];
-            $volume += (
-                $product['width'] * $product['height'] * $product['depth'] > 0 ?
-                    (($product['width']) * ($product['height']) * ($product['depth'])) / $divider :
-                    $defVolume
-                ) * $product['cart_quantity'];
+            $volume += ($product['width'] * $product['height'] * $product['depth'] > 0 ? ($product['width'] * $product['height'] * $product['depth']) / $divider : $defVolume) * $product['cart_quantity'];
             $cost += $productObj->getPrice() * $product['cart_quantity'];
         }
-        $paddedVolume = round(pow(pow($volume, 1 / 3) + (2 * $padding), 3), 6);
+        $paddedVolume = round(pow(pow($volume, 1 / 3) + 2 * $padding, 3), 6);
 
         return ['weight' => $weight, 'volume' => $paddedVolume, 'cost' => $cost];
     }

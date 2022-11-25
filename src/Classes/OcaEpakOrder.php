@@ -234,13 +234,12 @@ class OcaEpakOrder extends ObjectModel
                         break;
                 }
             }
-            if (isset($ocaAddress['geocoded country'])) 
-            {   
+            if (isset($ocaAddress['geocoded country'])) {   
                 $ocaAddress = [
-                    'floor' => $ocaAddress['floor'],
-                    'apartment' => $ocaAddress['apartment'],
-                    'other' => $ocaAddress['other'],
-                    'geocoded' => true,
+                'floor' => $ocaAddress['floor'],
+                'apartment' => $ocaAddress['apartment'],
+                'other' => $ocaAddress['other'],
+                'geocoded' => true,
                 ];
             }
         } else {

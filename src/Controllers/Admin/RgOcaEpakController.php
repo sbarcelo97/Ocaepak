@@ -159,7 +159,7 @@ class RgOcaEpakController extends FrameworkBundleAdminController
             }
         } catch (Exception $e) {
             if ($e->getMessage() == 'No results from OCA webservice') {
-                $error = ('There seems to be an error in the OCA operative');
+                $error = 'There seems to be an error in the OCA operative';
             } else {
                 $error = $e->getMessage();
             }

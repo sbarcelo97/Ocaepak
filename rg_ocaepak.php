@@ -13,18 +13,18 @@ use RgOcaEpak\Classes\OcaEpakRelay;
 
 class Rg_OcaEpak extends CarrierModule
 {
-    const MODULE_NAME = 'rg_ocaepak';                  //DON'T CHANGE!!
-    const CONFIG_PREFIX = 'RG_OCAEPAK_';               //prefix for all internal config constants
-    const CARRIER_NAME = 'Oca ePak';                //Carrier name string
-    const CARRIER_DELAY = '2 a 8 días hábiles';     //Carrier default delay string
-    const OPERATIVES_TABLE = 'ocae_operatives';     //DB table for Operatives
-    const OPERATIVES_ID = 'id_ocae_operatives';     //DB table id for Operatives
-    const BRANCHES_TABLE = 'ocae_branches';         //DB table for branches
-    const ORDERS_TABLE = 'ocae_orders';             //DB table for orders
-    const ORDERS_ID = 'id_ocae_orders';             //DB table id for orders
-    const QUOTES_TABLE = 'ocae_quotes';             //DB table for quotes
-    const RELAYS_TABLE = 'ocae_relays';             //DB table for relays
-    const RELAYS_ID = 'id_ocae_relays';             //DB table id for relays
+    const MODULE_NAME = 'rg_ocaepak';                  // DON'T CHANGE!!
+    const CONFIG_PREFIX = 'RG_OCAEPAK_';               // prefix for all internal config constants
+    const CARRIER_NAME = 'Oca ePak';                // Carrier name string
+    const CARRIER_DELAY = '2 a 8 días hábiles';     // Carrier default delay string
+    const OPERATIVES_TABLE = 'ocae_operatives';     // DB table for Operatives
+    const OPERATIVES_ID = 'id_ocae_operatives';     // DB table id for Operatives
+    const BRANCHES_TABLE = 'ocae_branches';         // DB table for branches
+    const ORDERS_TABLE = 'ocae_orders';             // DB table for orders
+    const ORDERS_ID = 'id_ocae_orders';             // DB table id for orders
+    const QUOTES_TABLE = 'ocae_quotes';             // DB table for quotes
+    const RELAYS_TABLE = 'ocae_relays';             // DB table for relays
+    const RELAYS_ID = 'id_ocae_relays';             // DB table id for relays
     const TRACKING_URL = 'https://www1.oca.com.ar/OEPTrackingWeb/trackingenvio.asp?numero1=@';
     const OCA_URL = 'http://webservice.oca.com.ar/ePak_tracking/Oep_TrackEPak.asmx?wsdl';
     const OCA_PREVIOUS_URL = 'http://webservice.oca.com.ar/oep_tracking/Oep_Track.asmx?WSDL';
@@ -33,7 +33,7 @@ class Rg_OcaEpak extends CarrierModule
     const OCA_WEBSERVICE_CODE_ERROR = 130;
     const OCA_WEBSERVICE_CODE_ORDER_DELETED = 100;
 
-    const PADDING = 0;          //space to add around the cart for volume calculations, in cm
+    const PADDING = 0;          // space to add around the cart for volume calculations, in cm
     const LOG_DEBUG = true;
     public $branchStateNames = [
         'Ciudad de Buenos Aires' => 'CAPITAL FEDERAL',
@@ -47,7 +47,7 @@ class Rg_OcaEpak extends CarrierModule
 
     public function __construct()
     {
-        $this->name = 'rg_ocaepak';            //DON'T CHANGE!!
+        $this->name = 'rg_ocaepak';            // DON'T CHANGE!!
         $this->tab = 'shipping_logistics';
         $this->version = '1.0.0';
         $this->author = 'Region Global';
@@ -83,7 +83,7 @@ class Rg_OcaEpak extends CarrierModule
      */
     public function install()
     {
-        //make translator aware of strings used in models
+        // make translator aware of strings used in models
         $this->l('El formato del costo adicional es incorrecto. Debes ser un monto fijo, como 7.50, o un porcentaje, como 6.99%', 'OcaEpak');
         if (!extension_loaded('soap')) {
             $this->_errors[] = $this->l('Tienes la extensión SOAP de PHP deshabilitada. Este módulo lo requiere para conectarse con los webservices de OCA.');
@@ -281,7 +281,7 @@ class Rg_OcaEpak extends CarrierModule
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('imprimir'))
                 ->setName('Imprimir Etiquetas Oca')
                 ->setOptions([
-                    // in most cases submit action should be implemented by module
+                    //  in most cases submit action should be implemented by module
                     'submit_route' => 'admin_rg_ocaepak_orders_print',
                     'route_params' => ['order_id' => 'order_id'],
                 ])
@@ -480,8 +480,8 @@ class Rg_OcaEpak extends CarrierModule
             'oca-full-address' => $fullAddress,
         ];
         $helper = new HelperForm();
-        $helper->base_folder = _PS_ADMIN_DIR_ . '/themes/default/template/helpers/form/'; //PS 1.7.7+ bug
-        //$helper->module = $this;
+        $helper->base_folder = _PS_ADMIN_DIR_ . '/themes/default/template/helpers/form/'; // PS 1.7.7+ bug
+        // $helper->module = $this;
         $helper->title = $this->displayName;
         $helper->name_controller = $this->name;
         $helper->identifier = $this->identifier;
@@ -540,7 +540,7 @@ class Rg_OcaEpak extends CarrierModule
 
                 return false;
             } else {
-                foreach ($form['boxes'] as &$box) {      //split cost and weight proportionally
+                foreach ($form['boxes'] as &$box) {      // split cost and weight proportionally
                     $vol = ($box['l'] * $box['d'] * $box['h']);
                     $volumePercentage = $vol / $boxVolume;
                     $box['v'] = number_format((float) $volumePercentage * $cartData['cost'], 2, '.', '');
@@ -580,7 +580,7 @@ class Rg_OcaEpak extends CarrierModule
                 ];
                 $boxVolume = $boxVolume + ($box['l'] * $box['d'] * $box['h']) * Tools::getValue('oca-box-q-' . $ind);
             }
-            //for printing use default box
+            // for printing use default box
             $def_boxes = array_filter($boxes, function ($box) { return $box['isd']; });
             if (count($form['boxes']) == 0) {
                 foreach ($def_boxes as $def_box) {
@@ -593,7 +593,7 @@ class Rg_OcaEpak extends CarrierModule
                     $boxVolume = $boxVolume + ($def_box['l'] * $def_box['d'] * $def_box['h']);
                 }
             }
-            foreach ($form['boxes'] as &$box) {      //split cost and weight proportionally
+            foreach ($form['boxes'] as &$box) {      // split cost and weight proportionally
                 $vol = ($box['l'] * $box['d'] * $box['h']);
                 $volumePercentage = $vol / $boxVolume;
                 $box['v'] = number_format((float) $volumePercentage * $cartData['cost'], 2, '.', '');
@@ -862,7 +862,7 @@ class Rg_OcaEpak extends CarrierModule
                 if (Configuration::get(self::CONFIG_PREFIX . 'BRANCH_SEL_TYPE') === '1') {
                     foreach ($postcodes as $postcode) {
                         $curCp = $postcode;
-                        $brs = OcaEpakBranches::retrieve(OcaCarrierTools::cleanPostcode($postcode));      //get cache
+                        $brs = OcaEpakBranches::retrieve(OcaCarrierTools::cleanPostcode($postcode));      // get cache
                         if (count($brs)) {
                             $branches[$postcode] = $brs;
                         } else {
@@ -874,7 +874,7 @@ class Rg_OcaEpak extends CarrierModule
                         }
                     }
                 } else {
-                    $brs = OcaEpakBranches::retrieve('0');      //get cache
+                    $brs = OcaEpakBranches::retrieve('0');      // get cache
                     if (count($brs)) {
                         $branches[0] = $brs;
                     } else {
@@ -962,7 +962,7 @@ class Rg_OcaEpak extends CarrierModule
                             if (Configuration::get(self::CONFIG_PREFIX . 'BRANCH_SEL_TYPE') === '1') {
                                 foreach ($postcodes as $postcode) {
                                     $curCp = $postcode;
-                                    $brs = OcaEpakBranches::retrieve(OcaCarrierTools::cleanPostcode($postcode));      //get cache
+                                    $brs = OcaEpakBranches::retrieve(OcaCarrierTools::cleanPostcode($postcode));      // get cache
                                     if (count($brs)) {
                                         $branches[$postcode] = $brs;
                                     } else {
@@ -973,7 +973,7 @@ class Rg_OcaEpak extends CarrierModule
                                     }
                                 }
                             } else {
-                                $brs = OcaEpakBranches::retrieve('0');      //get cache
+                                $brs = OcaEpakBranches::retrieve('0');      // get cache
                                 if (count($brs)) {
                                     $branches[0] = $brs;
                                 } else {
@@ -1097,7 +1097,7 @@ class Rg_OcaEpak extends CarrierModule
      */
     public function getOrderShippingCost($cart, $shipping_cost)
     {
-        if (Tools::getValue('action') === 'searchCarts') {    //prevent BO new order stalling
+        if (Tools::getValue('action') === 'searchCarts') {    // prevent BO new order stalling
             return false;
         }
         $address = new Address($cart->id_address_delivery);
@@ -1135,7 +1135,7 @@ class Rg_OcaEpak extends CarrierModule
         } else {
             $postcode = OcaCarrierTools::cleanPostcode($address->postcode);
         }
-        //$this->id_carrier ?? Carrier::getCarrierByReference()
+        // $this->id_carrier ?? Carrier::getCarrierByReference()
         $carrier = new Carrier($this->id_carrier);
         $op = OcaEpakOperative::getByFieldId('carrier_reference', $carrier->id_reference);
         if (
@@ -1197,7 +1197,7 @@ class Rg_OcaEpak extends CarrierModule
                 $cartData['volume'],
                 $cartData['weight'],
                 $cartData['cost']
-            )) {     //get cache
+            )) {     // get cache
                 return (float) Tools::ps_round(
                     $shipping_cost + OcaCarrierTools::convertCurrencyFromIso(
                         OcaCarrierTools::applyFee($cot, $op->addfee),
@@ -1217,7 +1217,7 @@ class Rg_OcaEpak extends CarrierModule
                 'Cuit' => Configuration::get(self::CONFIG_PREFIX . 'CUIT'),
                 'Operativa' => $op->reference,
             ]);
-            if ($data->Total > 0) {       //set cache
+            if ($data->Total > 0) {       // set cache
                 OcaEpakQuote::insert(
                     $op->reference,
                     OcaCarrierTools::cleanPostcode($postcode),
@@ -1451,34 +1451,34 @@ class Rg_OcaEpak extends CarrierModule
     {
         $services = [
             self::OCA_PREVIOUS_URL => [
-                //'AnularOrdenGenerada',
+                // 'AnularOrdenGenerada',
                 'GenerarConsolidacionDeOrdenesDeRetiro',
                 'GenerateListQrPorEnvio',
                 'GenerateQRParaPaquetes',
                 'GenerateQrByOrdenDeRetiro',
-                //'GetCentroCostoPorOperativa',
-                //'GetCentrosImposicion',
+                // 'GetCentroCostoPorOperativa',
+                // 'GetCentrosImposicion',
                 'GetCentrosImposicionAdmision',
                 'GetCentrosImposicionAdmisionPorCP',
                 'GetCentrosImposicionPorCP',
-                //'GetDatosDeEtiquetasPorOrdenOrNumeroEnvio',
+                // 'GetDatosDeEtiquetasPorOrdenOrNumeroEnvio',
                 'GetELockerOCA',
                 'GetEnviosUltimoEstado',
                 'GetHtmlDeEtiquetasLockersPorOrdenOrNumeroEnvio',
                 'GetHtmlDeEtiquetasLockersPorOrdenOrNumeroEnvioParaEtiquetadora',
-                //'GetHtmlDeEtiquetasPorOrdenOrNumeroEnvio',
-                //'GetHtmlDeEtiquetasPorOrdenOrNumeroEnvioParaEtiquetadora',
+                // 'GetHtmlDeEtiquetasPorOrdenOrNumeroEnvio',
+                // 'GetHtmlDeEtiquetasPorOrdenOrNumeroEnvioParaEtiquetadora',
                 'GetLocalidadesByProvincia',
                 'GetPdfDeEtiquetasPorOrdenOrNumeroEnvio',
-                //'GetProvincias',
+                // 'GetProvincias',
                 'GetServiciosDeCentrosImposicion',
                 'GetServiciosDeCentrosImposicion_xProvincia',
-                //'IngresoOR',
-                //'List_Envios',
-                //'Tarifar_Envio_Corporativo',
+                // 'IngresoOR',
+                // 'List_Envios',
+                // 'Tarifar_Envio_Corporativo',
                 'TrackingEnvio_EstadoActual',
                 'Tracking_OrdenRetiro',
-                //'Tracking_Pieza',
+                // 'Tracking_Pieza',
             ],
             self::OCA_URL => [
                 'AnularOrdenGenerada',
@@ -1545,7 +1545,7 @@ class Rg_OcaEpak extends CarrierModule
             throw new Exception($e->getMessage());
         }
         if (!count($xml->children())) {
-            throw new Exception('El webservice no arrojo resultados');      //String compared in operatives test
+            throw new Exception('El webservice no arrojo resultados');      // String compared in operatives test
         }
         if (property_exists($xml, 'NewDataSet')) {
             return reset($xml->NewDataSet);

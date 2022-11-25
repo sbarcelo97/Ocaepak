@@ -24,7 +24,7 @@ class AdminOcaEpakController extends ModuleAdminController
         if (!$op) {
             return null;
         }
-        //$customer = new Customer($order->id_customer);
+        // $customer = new Customer($order->id_customer);
         $cartData = OcaCarrierTools::getCartPhysicalData($cart, $cart->id_carrier, Configuration::get($this->module::CONFIG_PREFIX . 'DEFWEIGHT'), Configuration::get(rg_ocaepak::CONFIG_PREFIX . 'DEFVOLUME'), Rg_OcaEpak::PADDING);
         $shipping = $cart->getTotalShippingCost(null, false);
         $totalToPay = Tools::ps_round(OcaCarrierTools::applyFee($shipping, $op->addfee), 2);

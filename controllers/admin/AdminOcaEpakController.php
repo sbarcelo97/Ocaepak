@@ -49,7 +49,7 @@ class AdminOcaEpakController extends ModuleAdminController
             $quote = null;
         }
         $distributionCenter = [];
-        if (in_array($op->type, ['PaS', 'SaS']) && ($relay)) {
+        if (in_array($op->type, ['PaS', 'SaS']) && $relay) {
             $distributionCenter = $this->module->retrieveOcaBranchData($relay->distribution_center_id);
         }
         $this->context->smarty->assign([

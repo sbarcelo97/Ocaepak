@@ -279,14 +279,14 @@ class OcaEpakOperative extends ObjectModel
     protected function setCarrierGroups($carrier, $groups, $delete = true)
     {
         if ($delete) {
-            Db::getInstance()->execute('DELETE FROM ' . pSQL(_DB_PREFIX_) . 'carrier_group WHERE id_carrier = ' . (int) $carrier->id);
+            Db::getInstance()->execute('DELETE FROM ' . pSQL(_DB_PREFIX_) . 'carrier_group WHERE id_carrier = ' . (int)$carrier->id);
         }
         if (!is_array($groups) || !count($groups)) {
             return true;
         }
-        $sql = 'INSERT INTO ' . pSQL(_DB_PREFIX_) . 'carrier_group (id_carrier, id_group) VALUES ';
+        $sql = 'INSERT INTO '.pSQL(_DB_PREFIX_).'carrier_group (id_carrier, id_group) VALUES ';
         foreach ($groups as $id_group) {
-            $sql .= '(' . (int) $carrier->id . ', ' . (int) $id_group . '),';
+            $sql .= '(' . (int)$carrier->id . ', ' . (int)$id_group . '),';
         }
 
         return Db::getInstance()->execute(rtrim($sql, ','));

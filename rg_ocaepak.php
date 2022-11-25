@@ -51,7 +51,7 @@ class Rg_OcaEpak extends CarrierModule
     {
         $this->name = 'rg_ocaepak';            //DON'T CHANGE!!
         $this->tab = 'shipping_logistics';
-        $this->version = '1.0.0';
+        $this->version = '1.0';
         $this->author = 'Region Global';
         $this->need_instance = 1;
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => '1.7');
@@ -158,7 +158,6 @@ class Rg_OcaEpak extends CarrierModule
             Configuration::updateValue(self::CONFIG_PREFIX.'OBSERVATIONS', '') AND
             Configuration::updateValue(self::CONFIG_PREFIX.'BOXES', '') AND
             Configuration::updateValue(self::CONFIG_PREFIX.'TIMESLOT', '') AND
-            Configuration::updateValue(self::CONFIG_PREFIX.'GMAPS_API_KEY', Configuration::get('PS_API_KEY')) AND
             Configuration::updateValue(self::CONFIG_PREFIX.'BRANCH_SEL_TYPE', '0') AND
             Configuration::updateValue(self::CONFIG_PREFIX.'ADMISSION_BRANCH', '') AND
             Configuration::updateValue(self::CONFIG_PREFIX.'ADMISSIONS_ENABLED', false) AND
@@ -195,6 +194,8 @@ class Rg_OcaEpak extends CarrierModule
      {
         $db = Db::getInstance();
         OcaEpakOperative::purgeCarriers();
+
+
         return (
             parent::uninstall()
             AND $db->Execute(
@@ -227,7 +228,6 @@ class Rg_OcaEpak extends CarrierModule
             Configuration::deleteByName(self::CONFIG_PREFIX.'OBSERVATIONS') AND
             Configuration::deleteByName(self::CONFIG_PREFIX.'BOXES') AND
             Configuration::deleteByName(self::CONFIG_PREFIX.'TIMESLOT') AND
-            Configuration::deleteByName(self::CONFIG_PREFIX.'GMAPS_API_KEY') AND
             Configuration::deleteByName(self::CONFIG_PREFIX.'ADMISSION_BRANCH') AND
             Configuration::deleteByName(self::CONFIG_PREFIX.'BRANCH_SEL_TYPE') AND
             Configuration::deleteByName(self::CONFIG_PREFIX.'ADMISSIONS_ENABLED') AND
@@ -300,7 +300,6 @@ class Rg_OcaEpak extends CarrierModule
             self::CONFIG_PREFIX.'DEFWEIGHT' => Tools::getValue('defweight', Configuration::get(self::CONFIG_PREFIX.'DEFWEIGHT')),
             self::CONFIG_PREFIX.'DEFVOLUME' => Tools::getValue('defvolume', Configuration::get(self::CONFIG_PREFIX.'DEFVOLUME')),
             self::CONFIG_PREFIX.'POSTCODE' => Tools::getValue('postcode', Configuration::get(self::CONFIG_PREFIX.'POSTCODE')),
-            self::CONFIG_PREFIX.'GMAPS_API_KEY' => Tools::getValue('gmaps_api_key', Configuration::get(self::CONFIG_PREFIX.'GMAPS_API_KEY')),
             self::CONFIG_PREFIX.'BRANCH_SEL_TYPE' => Tools::getValue('branch_sel_type', Configuration::get(self::CONFIG_PREFIX.'BRANCH_SEL_TYPE')),
             self::CONFIG_PREFIX.'FAILCOST' => Tools::getValue('failcost', Configuration::get(self::CONFIG_PREFIX.'FAILCOST')),
             self::CONFIG_PREFIX.'ADMISSIONS_ENABLED' => Tools::getValue('oca_admissions', Configuration::get(self::CONFIG_PREFIX.'ADMISSIONS_ENABLED')),
@@ -323,15 +322,15 @@ class Rg_OcaEpak extends CarrierModule
     }
 
     public function hookactionAdminControllerSetMedia(){
-        if(Tools::getValue('controller') == ''){
-            $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/adminjs.js');
-        }
+        $this->context->controller->addJS(_PS_MODULE_DIR_ . $this->name . '/views/js/adminjs.js');
+
     }
+
 
     /**
      * @throws SmartyException
      */
-    protected function validateConfig($boxes)
+    protected function validateConfig( $boxes)
     {
         $error = [];
 
@@ -817,7 +816,7 @@ class Rg_OcaEpak extends CarrierModule
         );
         $this->context->controller->registerJavascript(
             'remote-gmaps',
-            'http'.(Configuration::get('PS_SSL_ENABLED') ? 's' : '').'://maps.google.com/maps/api/js?region=AR&key='.Configuration::get(self::CONFIG_PREFIX.'GMAPS_API_KEY'),
+            'http'.(Configuration::get('PS_SSL_ENABLED') ? 's' : '').'://maps.google.com/maps/api/js?region=AR&key='.null,
             array('server' => 'remote', 'position' => 'head', 'priority' => 20)
         );
         $this->context->controller->registerJavascript(
@@ -891,7 +890,7 @@ class Rg_OcaEpak extends CarrierModule
                     'ocaepak_relays' => $branches,
                     'relayed_carriers' => Tools::jsonEncode($carrierIds),
                     'ocaepak_name' => $this->name,
-                    'gmaps_api_key' => Configuration::get(self::CONFIG_PREFIX.'GMAPS_API_KEY'),
+                    'gmaps_api_key' => null,
                     'ocaepak_branch_sel_type' => Tools::strlen(Configuration::get(self::CONFIG_PREFIX.'BRANCH_SEL_TYPE')) ? Configuration::get(self::CONFIG_PREFIX.'BRANCH_SEL_TYPE') : '0',
                     'force_ssl' => Configuration::get('PS_SSL_ENABLED') || Configuration::get('PS_SSL_ENABLED_EVERYWHERE')
                 ) );
@@ -984,7 +983,7 @@ class Rg_OcaEpak extends CarrierModule
                                 'ocaepak_relays' => $branches,
                                 'relayed_carriers' => Tools::jsonEncode($carrierIds),
                                 'ocaepak_name' => $this->name,
-                                'gmaps_api_key' => Configuration::get(self::CONFIG_PREFIX.'GMAPS_API_KEY'),
+                                'gmaps_api_key' => null,
                                 'force_ssl' => Configuration::get('PS_SSL_ENABLED') || Configuration::get('PS_SSL_ENABLED_EVERYWHERE')
                             ));
                         } catch (Exception $e) {
@@ -1134,7 +1133,11 @@ class Rg_OcaEpak extends CarrierModule
         ) {
             return false;
         }
-        
+        $customer = isset($this->context->customer->id)? new Customer($this->context->customer->id) : null;
+        if (Configuration::get('PS_SHIPPING_FREE_PRICE')>0 && $cart->getOrderTotal(true,Cart::BOTH_WITHOUT_SHIPPING)>= Configuration::get('PS_SHIPPING_FREE_PRICE')
+        &&(is_null($customer) or !in_array($customer->id_default_group,[4,5]))){
+            return 0;
+        }
 
         if ($carrier->shipping_method == Carrier::SHIPPING_METHOD_PRICE) {
             return $shipping_cost;

@@ -23,7 +23,6 @@ class RgOcaepakRegistrationType extends AbstractType
             ->add('RG_OCAEPAK_POSTCODE',  NumberType::class,['required'=>true])
             ->add('RG_OCAEPAK_ADMISSIONS_ENABLED',  SwitchType::class,['required'=>false])
             ->add('RG_OCAEPAK_PICKUPS_ENABLED',  SwitchType::class,['required'=>false])
-            ->add('RG_OCAEPAK_GMAPS_API_KEY',  TextType::class,['required'=>false])
             ->add('RG_OCAEPAK_BRANCH_SEL_TYPE',  ChoiceType::class,['required'=>false, 'choices'=>['Mostrar todas las sucursales'=>0, 'Mostrar solo las sucursales de ese código postal'=>1]])
             ->add('RG_OCAEPAK_DEFWEIGHT',  TextType::class,['required'=>true])
             ->add('RG_OCAEPAK_DEFVOLUME',  TextType::class,['required'=>true])

@@ -1,7 +1,7 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 {% block content %}
     {{ form_start(form) }}
-    {{ ps.infotip('Podés encontrar tus operativas en <a href="http://www5.oca.com.ar/ocaepak/Seguro/ListadoOperativas.asp">') }}
+    {{ ps.infotip('Podés encontrar tus operativas en http://www5.oca.com.ar/ocaepak/Seguro/ListadoOperativas.asp') }}
     {% if error %}
         {{ ps.warningtip(error) }}
     {% endif %}

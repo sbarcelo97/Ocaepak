@@ -11,12 +11,12 @@ $(window).ready(() => {
 
     $boxes_card.hide();
     console.log($admission_settings.attr('show'));
-    if($admission_settings.attr('show')!==true){
+    if($admission_settings.attr('show')!=='1'){
         hideAdmissions();
     }else {
         showAdmissions();
     }
-    if($pickup_settings.attr('show')!==true){
+    if($pickup_settings.attr('show')!=='1'){
        hidePickups();
     }else {
         showPickups();

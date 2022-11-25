@@ -225,7 +225,7 @@ class OcaEpakOrder extends ObjectModel
                         break;
                     case 'administrative_area_level_1':
                         $ocaAddress['geocoded state'] = $component['long_name'];
-                        //  $ocaAddress['geocoded'] = true;
+                        // $ocaAddress['geocoded'] = true;
                         break;
                     case 'country':
                         if (trim($component['long_name']) != 'Argentina') {
@@ -234,7 +234,7 @@ class OcaEpakOrder extends ObjectModel
                         break;
                 }
             }
-            if (isset($ocaAddress['geocoded country'])) {   //not Argentina
+            if (isset($ocaAddress['geocoded country'])) {   
                 $ocaAddress = [
                     'floor' => $ocaAddress['floor'],
                     'apartment' => $ocaAddress['apartment'],

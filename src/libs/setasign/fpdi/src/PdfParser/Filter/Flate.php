@@ -60,7 +60,7 @@ class Flate implements FilterInterface
 
                 $oDataLen = strlen($oData);
                 while ($tries < 6 && ($data === false || (strlen($data) < ($oDataLen - $tries - 1)))) {
-                    $data = @(gzinflate(substr($oData, $tries)));
+                    $data = @gzinflate(substr($oData, $tries));
                     ++$tries;
                 }
 

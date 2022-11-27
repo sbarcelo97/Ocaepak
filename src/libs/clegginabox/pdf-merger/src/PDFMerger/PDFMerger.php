@@ -28,8 +28,9 @@ use setasign\Fpdi\Fpdi;
 
 class PDFMerger
 {
-    private $_files;// ['form.pdf']  ["1,2,4, 5-19"]
+    private $_files;
     private $_fpdi;
+    
     /**
      * Add a PDF for inclusion in the merge with a valid file path. Pages should be formatted: 1,3,6, 12-16.
      *

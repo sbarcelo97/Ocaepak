@@ -123,11 +123,11 @@ trait FpdfTplTrait
         }
 
         $this->_out(
-        // reset standard values, translate and scale
+            // reset standard values, translate and scale
             \sprintf(
                 'q 0 J 1 w 0 j 0 G 0 g %.4F 0 0 %.4F %.4F %.4F cm /%s Do Q',
-                ($newSize['width'] / $originalSize['width']),
-                ($newSize['height'] / $originalSize['height']),
+                $newSize['width'] / $originalSize['width'],
+                $newSize['height'] / $originalSize['height'],
                 $x * $this->k,
                 ($this->h - $y - $newSize['height']) * $this->k,
                 $template['id']

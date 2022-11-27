@@ -30,7 +30,6 @@ class PDFMerger
 {
     private $_files;
     private $_fpdi;
-    
     /**
      * Add a PDF for inclusion in the merge with a valid file path. Pages should be formatted: 1,3,6, 12-16.
      *

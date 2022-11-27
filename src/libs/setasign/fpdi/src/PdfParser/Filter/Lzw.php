@@ -169,11 +169,11 @@ class Lzw implements FilterInterface
             return 257;
         }
 
-        $this->nextData = ($this->nextData << 8) | (\ord($this->data[$this->bytePointer++]) & 0XFF);
+        $this->nextData = ($this->nextData << 8) | (\ord($this->data[$this->bytePointer++]) & 0xFF);
         $this->nextBits += 8;
 
         if ($this->nextBits < $this->bitsToGet) {
-            $this->nextData = ($this->nextData << 8) | (\ord($this->data[$this->bytePointer++]) & 0XFF);
+            $this->nextData = ($this->nextData << 8) | (\ord($this->data[$this->bytePointer++]) & 0xFF);
             $this->nextBits += 8;
         }
 

@@ -35,7 +35,7 @@ class Ascii85 implements FilterInterface
 
         /* @noinspection ForeachInvariantsInspection */
         for ($k = 0; $k < $l; ++$k) {
-            $ch = \ord($data[$k]) & 0XFF;
+            $ch = \ord($data[$k]) & 0xFF;
 
             // Start <~
             if ($k === 0 && $ch === 60 && isset($data[$k + 1]) && (\ord($data[$k + 1]) & 0xFF) === 126) {

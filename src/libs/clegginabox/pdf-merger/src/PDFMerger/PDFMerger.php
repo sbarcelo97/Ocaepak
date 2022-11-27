@@ -28,9 +28,8 @@ use setasign\Fpdi\Fpdi;
 
 class PDFMerger
 {
-    private $_files;    //['form.pdf']  ["1,2,4, 5-19"]
+    private $_files;// ['form.pdf']  ["1,2,4, 5-19"]
     private $_fpdi;
-
     /**
      * Add a PDF for inclusion in the merge with a valid file path. Pages should be formatted: 1,3,6, 12-16.
      *
@@ -71,7 +70,7 @@ class PDFMerger
 
         $fpdi = new Fpdi();
 
-        // merger operations
+        //  merger operations
         foreach ($this->_files as $file) {
             $filename = $file[0];
             $filepages = $file[1];
@@ -79,7 +78,7 @@ class PDFMerger
 
             $count = $fpdi->setSourceFile($filename);
 
-            //add the pages
+            // add the pages
             if ($filepages == 'all') {
                 for ($i = 1; $i <= $count; ++$i) {
                     $template = $fpdi->importPage($i);
@@ -103,7 +102,7 @@ class PDFMerger
             }
         }
 
-        //output operations
+        // output operations
         $mode = $this->_switchmode($outputmode);
 
         if ($mode == 'S') {
@@ -159,13 +158,13 @@ class PDFMerger
         $pages = str_replace(' ', '', $pages);
         $part = explode(',', $pages);
 
-        //parse hyphens
+        // parse hyphens
         foreach ($part as $i) {
             $ind = explode('-', $i);
 
             if (count($ind) == 2) {
-                $x = $ind[0]; //start page
-                $y = $ind[1]; //end page
+                $x = $ind[0]; // start page
+                $y = $ind[1]; // end page
 
                 if ($x > $y) {
                     throw new Exception("Starting page, '$x' is greater than ending page '$y'.");
@@ -173,7 +172,7 @@ class PDFMerger
                     return false;
                 }
 
-                //add middle pages
+                // add middle pages
                 while ($x <= $y) {
                     $newpages[] = (int) $x;
                     ++$x;

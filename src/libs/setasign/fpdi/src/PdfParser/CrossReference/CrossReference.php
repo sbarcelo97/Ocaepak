@@ -242,7 +242,7 @@ class CrossReference
 
             $this->checkForEncryption($stream->value);
 
-            throw new CrossReferenceException('This PDF document probably uses a compression technique which is not supported by the ' . 'free parser shipped with FPDI. (See https://www.setasign.com/fpdi-pdf-parser for more details)', CrossReferenceException::COMPRESSED_XREF);
+            throw new CrossReferenceException('This PDF document probably uses a compression technique which is not supported by the free parser shipped with FPDI. (See https://www.setasign.com/fpdi-pdf-parser for more details)', CrossReferenceException::COMPRESSED_XREF);
         }
 
         throw new CrossReferenceException('The xref position points to an incorrect object type.', CrossReferenceException::INVALID_DATA);

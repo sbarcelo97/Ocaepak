@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * Copyright 2022 Region Global
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -247,7 +247,7 @@ class OcaEpakOrder extends ObjectModel
                         }
                         break;
                 }
-            } 
+            }
             if (isset($ocaAddress['geocoded country'])){   
                 $ocaAddress = [
                 'floor' => $ocaAddress['floor'],

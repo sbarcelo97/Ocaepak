@@ -8,7 +8,7 @@
         "fpdi",
         "fpdf"
     ],
-    "license": "AFL-3.0",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "setasign\\Fpdi\\": "src/"
@@ -47,6 +47,5 @@
         "psr-4": {
             "setasign\\Fpdi\\": "tests/"
         }
-    },
-    "author": "PrestaShop"
+    }
 }

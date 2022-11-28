@@ -6,7 +6,7 @@
         "async"
     ],
     "homepage": "https://github.com/spatie/async",
-    "license": "AFL-3.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "Brent Roose",
@@ -47,6 +47,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "author": "PrestaShop"
+    }
 }

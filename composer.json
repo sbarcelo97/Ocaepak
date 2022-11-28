@@ -1,23 +1,18 @@
 {
-    "name": "region-global/oca-epak",
-    "description": "Oca ePak module for Prestashop",
-    "minimum-stability": "stable",
-    "authors": [
-        {
-            "name": "Region Global"
-        }
-    ],
-    "require": {
-        "php": ">=5.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "RgOcaEpak\\": "src/"
-        }
-    },
-    "require-dev": {
-        "prestashop/php-dev-tools": "^4.3"
-    },
-    "author": "PrestaShop",
-    "license": "AFL-3.0"
+  "name": "region-global/oca-epak",
+  "description": "Oca ePak module for Prestashop",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Region Global"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "RgOcaEpak\\": "src/"
+    }
+  }
 }

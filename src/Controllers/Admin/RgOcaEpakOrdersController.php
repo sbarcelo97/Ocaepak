@@ -18,7 +18,6 @@
 * @copyright 2022 Region Global 
 * @license http://www.apache.org/licenses/LICENSE-2.0
 */
-*/
 namespace RgOcaEpak\Controllers\Admin;
 
 use ModuleCore;

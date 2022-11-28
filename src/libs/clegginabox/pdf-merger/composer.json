@@ -1,7 +1,7 @@
 {
     "name": "clegginabox/pdf-merger",
     "description": "PDF File Merger for PHP5",
-    "license": "MIT",
+    "license": "AFL-3.0",
     "require": {
         "setasign/fpdi": "^2.2",
         "setasign/fpdf": "^1.8"
@@ -16,5 +16,6 @@
         "classmap": [
             "src/PDFMerger/PDFMerger.php"
         ]
-    }
+    },
+    "author": "PrestaShop"
 }

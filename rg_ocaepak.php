@@ -907,7 +907,6 @@ class Rg_OcaEpak extends CarrierModule
         return null;
     }
 
-
     /**
      * @param array $params [carrier, cookie, cart, altern]
      *

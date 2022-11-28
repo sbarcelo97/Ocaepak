@@ -7,8 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'RgOcaEpak\\' => array($baseDir . '/src'),
-    'setasign\\Fpdi\\' => array($baseDir . '/src/libs/setasign/fpdi/src'),
-    'setasign\\Fpdfd\\' => array($baseDir . '/src/libs/setasign/fpdf'),
-    'Spatie\\Async\\' => array($baseDir . '/src/libs/async-master/async-master/src'),
-    'Clegginabox\\PDFMerger\\' => array($baseDir . '/src/libs/clegginabox/pdf-merger/src/PDFMerger'),
 );

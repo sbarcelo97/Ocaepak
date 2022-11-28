@@ -15,7 +15,6 @@
 */
 namespace RgOcaEpak\Controllers\Admin;
 
-use Clegginabox\PDFMerger\PDFMerger;
 use ModuleCore;
 use PrestaShop\PrestaShop\Adapter\Entity\Address;
 use PrestaShop\PrestaShop\Adapter\Entity\Carrier;
@@ -30,7 +29,6 @@ use RgOcaEpak\Classes\OcaCarrierTools;
 use RgOcaEpak\Classes\OcaEpakOperative;
 use RgOcaEpak\Classes\OcaEpakOrder;
 use RgOcaEpak\Classes\OcaEpakRelay;
-use setasign\Fpdi\Fpdi;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -136,53 +134,16 @@ class RgOcaEpakOrdersController extends Controller
             if ($zip->open($filePath, ZipArchive::CREATE) !== true) {
                 exit("cannot open zip\n");
             }
-            $pdfmerged = new PDFMerger();
-            $outputNamepdf = $datadir . 'all_etiquetas.pdf';
-            $output = $datadir . 'etiquetas.pdf';
-
+            
             foreach ($stickers as $id => $sticker) {
                 $name = 'etiquetas_' . $id . '.pdf';
                 $path = $datadir . $name;
                 $pdf = fopen($path, 'a+');
                 fwrite($pdf, base64_decode($sticker));
                 fclose($pdf);
-                $pdfmerged->addPDF($path);
-                $pdfmerged->merge('file', $outputNamepdf, 'L');
+                $zip->addFile($path, 'etiquetas.pdf');
             }
-            $pdf = new Fpdi();
-
-            $pageCount = $pdf->setSourceFile($outputNamepdf);
-
-            $width = $pdf->GetPageWidth() / 2 - 15;
-            $height = 0;
-
-            $_x = $x = 10;
-            $_y = $y = 10;
-
-            $pdf->AddPage();
-            for ($n = 1; $n <= $pageCount; ++$n) {
-                $pageId = $pdf->importPage($n);
-                $size = $pdf->useImportedPage($pageId, $x, $y, 270);
-                $height = 150;
-                if ($n % 2 == 0) {
-                    $y += $height;
-                    $x = $_x;
-                    $height = 0;
-                } else {
-                    $x += $width + 10;
-                }
-
-                if ($n % 4 == 0 && $n != $pageCount) {
-                    $pdf->AddPage();
-                    $x = $_x;
-                    $y = $_y;
-                }
-            }
-
-            $pdf->Output('F', $output);
-            if (!empty($stickers) && file_exists($output)) {
-                $zip->addFile($output, 'etiquetas.pdf');
-            }
+            
             ob_end_flush();
 
             $zip->close();
@@ -195,7 +156,6 @@ class RgOcaEpakOrdersController extends Controller
             // Read the file
             readfile($filePath);
             unlink($filePath);
-            unlink($outputNamepdf);
             unset($pdfmerged);
         }
 

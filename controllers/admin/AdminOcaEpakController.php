@@ -15,7 +15,7 @@
 * limitations under the License.
 *
 * @author Region Global
-* @copyright 2022 Region Global 
+* @copyright 2022 Region Global
 * @license http://www.apache.org/licenses/LICENSE-2.0
 */
 use RgOcaEpak\Classes\OcaCarrierTools;

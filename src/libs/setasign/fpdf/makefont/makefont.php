@@ -6,7 +6,6 @@
 * Date:    2019-12-07                                                          *
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
-
 require 'ttfparser.php';
 
 function Message($txt, $severity = '')

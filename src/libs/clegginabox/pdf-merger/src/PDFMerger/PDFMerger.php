@@ -20,7 +20,6 @@
  * They are not modified in any way. PDFMerger has all the limitations of the FPDI package - essentially, it cannot import dynamic content
  * such as form fields, links or page annotations (anything not a part of the page content stream).
  */
-
 namespace Clegginabox\PDFMerger;
 
 use Exception;

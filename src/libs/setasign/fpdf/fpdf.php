@@ -6,7 +6,6 @@
 * Date:    2021-08-28                                                          *
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
-
 namespace setasing\Fpdfd;
 
 define('FPDF_VERSION', '1.84');

@@ -234,7 +234,6 @@ class OcaEpakOrder extends ObjectModel
                         break;
                 }
             }
-<<<<<<< HEAD
             if (isset($ocaAddress['geocoded country'])){   
                 $ocaAddress = [
                 'floor' => $ocaAddress['floor'],
@@ -243,16 +242,6 @@ class OcaEpakOrder extends ObjectModel
                 'geocoded' => true,
                 ];
             }
-=======
-                if (isset($ocaAddress['geocoded country'])) {   
-                    $ocaAddress = [
-                    'floor' => $ocaAddress['floor'],
-                    'apartment' => $ocaAddress['apartment'],
-                    'other' => $ocaAddress['other'],
-                    'geocoded' => true,
-                    ];
-                }
->>>>>>> 683143f90caad09439848bcdf071bdb719e4ed2b
         } else {
             $ocaAddress['geocoded'] = false;
         }
